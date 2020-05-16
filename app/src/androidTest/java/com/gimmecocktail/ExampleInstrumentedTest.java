@@ -1,4 +1,4 @@
-package com.example.gimmecocktail;
+package com.gimmecocktail;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.gimmecocktail", appContext.getPackageName());
+        assertEquals("com.gimmecocktail", appContext.getPackageName());
     }
 }

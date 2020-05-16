@@ -1,4 +1,4 @@
-package com.example.gimmecocktail;
+package com.gimmecocktail;
 
 import androidx.appcompat.app.AppCompatActivity;
 

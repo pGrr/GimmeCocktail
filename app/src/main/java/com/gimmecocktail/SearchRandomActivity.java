@@ -1,14 +1,14 @@
-package com.example.gimmecocktail;
+package com.gimmecocktail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class SearchByNameActivity extends AppCompatActivity {
+public class SearchRandomActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_by_name);
+        setContentView(R.layout.activity_search_random);
     }
 }
