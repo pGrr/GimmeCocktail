@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button_by_name"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="by name"
+            android:textColor="@color/colorAccent"
+            app:icon="@android:drawable/ic_menu_search"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button_by_ingredient"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:isScrollContainer="false"
+            android:padding="10dp"
+            android:text="by ingredient"
+            android:textColor="@color/colorAccent"
+            app:icon="@android:drawable/ic_menu_search"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="@color/ic_launcher_background"
+            app:rippleColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button_discover_random"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="Discover random"
+            android:textColor="@color/colorAccent"
+            android:textColorLink="@color/colorAccent"
+            app:icon="@android:drawable/ic_popup_sync"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTint="@color/material_on_primary_disabled" />
+
+        <Button
+            android:id="@+id/button_favourites"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="Favourites"
+            android:textColor="@color/ic_launcher_background"
+            app:icon="@android:drawable/star_off"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconTintMode="add" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
