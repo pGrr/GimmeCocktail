@@ -1,10 +1,10 @@
 package com.gimmecocktail;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import java.util.Map;
 
 public final class Cocktail {
@@ -13,23 +13,25 @@ public final class Cocktail {
     private final String name; // strDrink
     private final String type; // strAlcoholic
     private final String category; // strCategory
-    private final Image thumbnail; // fetch strDrinkThumb (url) => save image locally
+    private final String thumbnailUrl; // strDrinkThumb
     private final String glass; // strGlass
     private final Map<String, String> ingredients; // { strIngredient1 => strMeasure1, ...}
     private final String instructions; // strInstructions
+    private Bitmap thumbnail;
 
     public Cocktail(
             String name,
             String type,
             String category,
             Map<String,String> ingredients,
-            Image thumbnail,
+            String thumbnailUrl,
             String glass,
             String instructions) {
         this.name = name;
         this.type = type;
         this.category = category;
-        this.thumbnail = thumbnail;
+        this.thumbnailUrl = thumbnailUrl;
+        this.thumbnail = null;
         this.glass = glass;
         this.ingredients = ingredients;
         this.instructions = instructions;
@@ -47,9 +49,13 @@ public final class Cocktail {
         return category;
     }
 
-    public Image getThumbnail() {
-        return thumbnail;
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
+
+    public Bitmap getThumbnail() { return thumbnail; }
+
+    public void setThumbnail(Bitmap thumbnail) { this.thumbnail = thumbnail; }
 
     public String getGlass() {
         return glass;

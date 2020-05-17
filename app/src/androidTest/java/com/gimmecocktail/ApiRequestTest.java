@@ -1,15 +1,14 @@
 package com.gimmecocktail;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.gimmecocktail.http.CocktailRequestQueue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,7 +26,7 @@ public class ApiRequestTest {
     @Test
     public void testRequestByName() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        ApiRequest api = new ApiRequest(appContext);
+        CocktailRequestQueue api = new CocktailRequestQueue(appContext);
         api.searchByName("margarita");
         assertEquals(4, 4);//cocktails.size());
     }

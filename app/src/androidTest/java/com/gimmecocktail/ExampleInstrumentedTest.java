@@ -1,15 +1,14 @@
 package com.gimmecocktail;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.gimmecocktail.http.CocktailRequestQueue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -31,8 +30,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testRequestByName() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        ApiRequest api = new ApiRequest(appContext);
-        api.searchByName("margarita");
+        CocktailRequestQueue api = new CocktailRequestQueue(appContext);
         assertEquals(4, 4);
     }
 }
