@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context=".SearchByNameActivity">
+    tools:context=".SearchByIngredientActivity">
+
 
     <TextView
-        android:id="@+id/search_by_name"
+        android:id="@+id/search_by_ingredient"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="20dp"
-        android:text="Search cocktail by name"
+        android:text="Search cocktail by ingredient"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
@@ -23,9 +24,9 @@
 
     <include
         layout="@layout/search"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_by_name" />
+        app:layout_constraintTop_toBottomOf="@+id/search_by_ingredient" />
 </androidx.constraintlayout.widget.ConstraintLayout>

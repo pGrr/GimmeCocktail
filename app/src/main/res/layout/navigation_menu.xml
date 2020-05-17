@@ -88,6 +88,7 @@
             android:padding="10dp"
             android:text="Favourites"
             android:textColor="@color/colorAccent"
+            android:textSize="12sp"
             app:icon="@android:drawable/star_off"
             app:iconGravity="textStart"
             app:iconPadding="10dp"
