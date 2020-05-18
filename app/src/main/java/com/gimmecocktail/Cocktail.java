@@ -61,7 +61,11 @@ public final class Cocktail {
         return glass;
     }
 
-    public Map<String, String> getIngredients() {
+    public String getIngredients() {
+        String ingredients = new String();
+        for (Map.Entry<String,String> ingredient: this.ingredients.entrySet()) {
+            ingredients += ingredient.getKey() + ": " + ingredient.getValue() + "\n";
+        }
         return ingredients;
     }
 

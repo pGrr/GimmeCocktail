@@ -57,7 +57,7 @@ public class CocktailRequestQueue extends RequestQueue {
             }
         }
         String imageUrl = jsonCocktail.getString("strDrinkThumb");
-        fetchImage(imageUrl);
+        //fetchImage(imageUrl);
         return new Cocktail(
                 jsonCocktail.getString("strDrink"),
                 jsonCocktail.getString("strAlcoholic"),

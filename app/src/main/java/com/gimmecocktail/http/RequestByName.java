@@ -35,7 +35,6 @@ public final class RequestByName extends CocktailRequestQueue {
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
                             List<Cocktail> cocktails = cocktailSequenceFrom(cocktailResponse);
-                            Log.d("ApiTest", "Response: " + cocktails.toString());
                             mutableLiveData.setValue(cocktails);
                         } catch (JSONException e) {
                             e.printStackTrace();

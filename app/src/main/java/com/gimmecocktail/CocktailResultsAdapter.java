@@ -27,7 +27,7 @@ public class CocktailResultsAdapter extends RecyclerView.Adapter<CocktailResults
             ViewGroup parent, int viewType) {
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card, parent, false);
+                .inflate(R.layout.cocktail_card, parent, false);
 
 
         // ...
