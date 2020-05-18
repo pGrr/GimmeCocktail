@@ -25,24 +25,17 @@ public class ImageRequestQueue extends RequestQueue {
     private static final int MAX_WIDTH = 300;
     private static final int MAX_HEIGHT = 300;
 
-    private final Context context;
-    private final MutableLiveData<List<Cocktail>> mutableLiveData;
-
-    public ImageRequestQueue(Context context, final MutableLiveData<List<Cocktail>> mutableLiveData, String url) {
+    public ImageRequestQueue(Context context, final ImageView imageView, String url) {
         super(
                 new DiskBasedCache(context.getCacheDir(), MAX_CACHE_SIZE_IN_BYTES),
                 new BasicNetwork(new HurlStack()));
-        this.context = context;
-        this.mutableLiveData = mutableLiveData;
         this.start();
-        final Cocktail cocktail = getCocktailFromUrl(mutableLiveData, url);
         ImageRequest thumbnailRequest = new ImageRequest(
                 url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap thumbnail) {
-                        cocktail.setThumbnail(thumbnail);
-                        mutableLiveData.notifyAll();
+                        imageView.setImageBitmap(thumbnail);
                     }
                 },
                 MAX_WIDTH,
@@ -56,15 +49,5 @@ public class ImageRequestQueue extends RequestQueue {
                     }
                 });
         this.add(thumbnailRequest);
-    }
-
-    private Cocktail getCocktailFromUrl(MutableLiveData<List<Cocktail>> mutableLiveData, String url) {
-        final List<Cocktail> cocktails = mutableLiveData.getValue();
-        for (Cocktail cocktail : cocktails) {
-            if (cocktail.getThumbnailUrl().equals(url)) {
-                return cocktail;
-            }
-        }
-        return null;
     }
 }

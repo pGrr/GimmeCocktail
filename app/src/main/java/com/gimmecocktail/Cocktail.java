@@ -2,6 +2,7 @@ package com.gimmecocktail;
 
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -64,7 +65,10 @@ public final class Cocktail {
     public String getIngredients() {
         String ingredients = new String();
         for (Map.Entry<String,String> ingredient: this.ingredients.entrySet()) {
-            ingredients += ingredient.getKey() + ": " + ingredient.getValue() + "\n";
+            ingredients += ingredient.getKey();
+            if (!ingredient.getValue().equals("null")) {
+                ingredients += ": " + ingredient.getValue() + "\n";
+            }
         }
         return ingredients;
     }

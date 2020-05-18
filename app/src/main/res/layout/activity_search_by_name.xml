@@ -14,6 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:elevation="10dp"
             android:padding="20dp"
             android:text="Search cocktail by name"
             android:textAlignment="center"
@@ -32,27 +33,22 @@
             android:background="@color/design_default_color_background"
             android:iconifiedByDefault="false"
             android:queryHint="@android:string/search_go"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_by_name" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.25" />
 
         <!--Define an id attribute for RecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktails_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorAccent"
+            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:listitem="@layout/cocktail_card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,6 @@ public class CocktailRequestQueue extends RequestQueue {
             JSONObject jsonCocktail = drinksArray.getJSONObject(i);
             Cocktail cocktail = this.cocktailFrom(jsonCocktail);
             cocktails.add(cocktail);
-            Log.d("ApiTest", cocktail.toString());
         }
         return cocktails;
     }
@@ -57,7 +56,6 @@ public class CocktailRequestQueue extends RequestQueue {
             }
         }
         String imageUrl = jsonCocktail.getString("strDrinkThumb");
-        //fetchImage(imageUrl);
         return new Cocktail(
                 jsonCocktail.getString("strDrink"),
                 jsonCocktail.getString("strAlcoholic"),
@@ -66,10 +64,6 @@ public class CocktailRequestQueue extends RequestQueue {
                 imageUrl,
                 jsonCocktail.getString("strGlass"),
                 jsonCocktail.getString("strInstructions"));
-    }
-
-    private void fetchImage(String url) {
-        new ImageRequestQueue(context, mutableLiveData, url);
     }
 
     protected MutableLiveData<List<Cocktail>> getMutableLiveData() {
