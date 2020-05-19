@@ -1,18 +1,20 @@
-package com.gimmecocktail;
+package com.gimmecocktail.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.databinding.CocktailCardBinding;
 
 import java.util.List;
 
 public class CocktailsAdapter extends RecyclerView.Adapter<CocktailsAdapter.CocktailsViewHolder> {
     private List<Cocktail> cocktails;
-
+    private static CocktailsViewHolder.ClickListener clickListener;
     public CocktailsAdapter(List<Cocktail> cocktails) {
         this.cocktails = cocktails;
     }
@@ -20,6 +22,10 @@ public class CocktailsAdapter extends RecyclerView.Adapter<CocktailsAdapter.Cock
     @Override
     public int getItemCount() {
         return cocktails.size();
+    }
+
+    public void setOnItemClickListener(CocktailsViewHolder.ClickListener clickListener) {
+        CocktailsAdapter.clickListener = clickListener;
     }
 
     // Create new views (invoked by the layout manager)
@@ -53,10 +59,17 @@ public class CocktailsAdapter extends RecyclerView.Adapter<CocktailsAdapter.Cock
         // Since our layout file is item_movie.xml, our auto generated binding class is ItemMovieBinding
         private CocktailCardBinding binding;
 
+
         //Define a constructor taking a ItemMovieBinding as its parameter
         public CocktailsViewHolder(CocktailCardBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onItemClick(getAdapterPosition());
+                }
+            });
         }
 
         /**
@@ -65,6 +78,10 @@ public class CocktailsAdapter extends RecyclerView.Adapter<CocktailsAdapter.Cock
         public void bind(Cocktail cocktail) {
             binding.setCocktail(cocktail);
             binding.executePendingBindings();
+        }
+
+        public interface ClickListener {
+            void onItemClick(int position);
         }
     }
 }

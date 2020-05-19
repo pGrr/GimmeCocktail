@@ -1,4 +1,4 @@
-package com.gimmecocktail;
+package com.gimmecocktail.viewmodels;
 
 import android.app.Application;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.http.RequestByIngredient;
 import com.gimmecocktail.http.RequestByName;
 

@@ -2,13 +2,15 @@ package com.gimmecocktail;
 
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
 import java.util.Map;
 
-public final class Cocktail {
+public final class Cocktail implements Parcelable {
     public static final int N_MAX_INGREDIENTS = 15;
 
     private final String name; // strDrink
@@ -16,9 +18,8 @@ public final class Cocktail {
     private final String category; // strCategory
     private final String thumbnailUrl; // strDrinkThumb
     private final String glass; // strGlass
-    private final Map<String, String> ingredients; // { strIngredient1 => strMeasure1, ...}
+    private final String ingredients; // { strIngredient1 => strMeasure1, ...}
     private final String instructions; // strInstructions
-    private Bitmap thumbnail;
 
     public Cocktail(
             String name,
@@ -32,9 +33,8 @@ public final class Cocktail {
         this.type = type;
         this.category = category;
         this.thumbnailUrl = thumbnailUrl;
-        this.thumbnail = null;
         this.glass = glass;
-        this.ingredients = ingredients;
+        this.ingredients = convertIngredients(ingredients);
         this.instructions = instructions;
     }
 
@@ -54,17 +54,17 @@ public final class Cocktail {
         return thumbnailUrl;
     }
 
-    public Bitmap getThumbnail() { return thumbnail; }
-
-    public void setThumbnail(Bitmap thumbnail) { this.thumbnail = thumbnail; }
-
     public String getGlass() {
         return glass;
     }
 
     public String getIngredients() {
+        return ingredients;
+    }
+
+    private String convertIngredients(Map<String,String> ingredientsMap) {
         String ingredients = new String();
-        for (Map.Entry<String,String> ingredient: this.ingredients.entrySet()) {
+        for (Map.Entry<String,String> ingredient: ingredientsMap.entrySet()) {
             ingredients += ingredient.getKey();
             if (!ingredient.getValue().equals("null")) {
                 ingredients += ": " + ingredient.getValue() + "\n";
@@ -89,5 +89,42 @@ public final class Cocktail {
                 + "ingredients: " + this.ingredients + "; "
                 + "instructions: " + this.instructions + "; "
                 + " }";
+    }
+
+    // parcelable part
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Cocktail createFromParcel(Parcel in ) {
+            return new Cocktail( in );
+        }
+        public Cocktail[] newArray(int size) {
+            return new Cocktail[size];
+        }
+    };
+
+    public Cocktail(Parcel in){
+        this.name = in.readString();
+        this.type = in.readString();
+        this.category = in.readString();
+        this.thumbnailUrl = in.readString();
+        this.glass = in.readString();
+        this.ingredients = in.readString();
+        this.instructions = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(type);
+        dest.writeString(category);
+        dest.writeString(thumbnailUrl);
+        dest.writeString(glass);
+        dest.writeString(ingredients);
+        dest.writeString(instructions);
     }
 }
