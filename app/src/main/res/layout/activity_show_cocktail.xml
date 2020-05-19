@@ -43,19 +43,14 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                style="@style/AppTheme"
                 android:id="@+id/button_favourites"
+                style="@style/AppTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:adjustViewBounds="false"
-                android:backgroundTint="@null"
                 android:clickable="true"
-                android:foregroundTint="@null"
                 android:textAlignment="center"
-                android:tint="@null"
-                android:tintMode="add"
-                app:backgroundTint="@color/colorAccent"
                 app:srcCompat="@android:drawable/btn_star_big_off" />
 
         </LinearLayout>
@@ -90,23 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text='@{"Type: " + cocktail.type, default=Cocktail_type}'
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text='@{"Category: " + cocktail.category, default=Cocktail_category}'
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text='@{"Glass: " + cocktail.glass, default=Cocktail_glass}'
+                        android:text='@{cocktail.getTypeCategoryAndGlassAsString(), default=Cocktail_type}'
                         android:textSize="18sp" />
 
                     <TextView

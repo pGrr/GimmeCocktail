@@ -77,6 +77,14 @@ public final class Cocktail implements Parcelable {
         return instructions;
     }
 
+    public String getTypeCategoryAndGlassAsString() {
+        String s = new String();
+        s += "Type: " + this.getType() + "\n";
+        s += "Category: " + this.getCategory() + "\n";
+        s += "Glass: " + this.getGlass() + "\n";
+        return s;
+    }
+
     @NonNull
     @Override
     public String toString() {
