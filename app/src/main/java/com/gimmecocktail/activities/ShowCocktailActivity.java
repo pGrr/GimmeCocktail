@@ -4,9 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.R;
@@ -41,17 +47,19 @@ public class ShowCocktailActivity extends AppCompatActivity {
 
 
     private void setFavouriteButtonBehaviour() {
-        final FloatingActionButton button = (FloatingActionButton) findViewById(R.id.button_favourites);
+        final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.button_favourites);
+        button.setColorFilter(getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (model.isFavourite()) {
                     model.setFavourite(false);
-                    button.setImageDrawable(getDrawable(android.R.drawable.btn_star_big_off));
+                    button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
                 } else {
                     model.setFavourite(true);
-                    button.setImageDrawable(getDrawable(android.R.drawable.btn_star_big_on));
+                    button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
                 }
+                button.setColorFilter(getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
             }
         });
     }

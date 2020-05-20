@@ -29,10 +29,9 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
-                android:shadowColor="@color/colorAccent"
                 android:text="@{cocktail.name, default=Title}"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorOnPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
