@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivityShowCocktailBinding;
+import com.gimmecocktail.http.ImageRequestQueue;
 import com.gimmecocktail.viewmodels.SearchViewModel;
 import com.gimmecocktail.viewmodels.ShowCocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,6 +44,8 @@ public class ShowCocktailActivity extends AppCompatActivity {
         }
         binding.setCocktail(model.getCocktail().getValue());
         setFavouriteButtonBehaviour();
+        ImageView imageView = findViewById(R.id.cocktail_thumbnail);
+        new ImageRequestQueue(this, imageView, model.getCocktail().getValue().getThumbnailUrl());
     }
 
 
