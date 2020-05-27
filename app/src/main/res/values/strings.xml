@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GimmeCocktail</string>
+    <string name="search_cocktail_by_name_title">Search cocktail by name</string>
+    <string name="search_cocktail_by_ingredient_title">Search cocktail by ingredient</string>
 </resources>

@@ -90,9 +90,9 @@
                         android:id="@+id/cocktail_thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:elevation="10dp"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@drawable/logo" />
+                        android:elevation="10dp"
+                        app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
                     <TextView
                         android:id="@+id/textView2"

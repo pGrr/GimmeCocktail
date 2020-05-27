@@ -1,24 +1,19 @@
 package com.gimmecocktail.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ToggleButton;
 
 import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivityShowCocktailBinding;
-import com.gimmecocktail.http.ImageRequestQueue;
-import com.gimmecocktail.viewmodels.SearchViewModel;
+import com.gimmecocktail.http.ThumbnailRequest;
 import com.gimmecocktail.viewmodels.ShowCocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -45,14 +40,20 @@ public class ShowCocktailActivity extends AppCompatActivity {
         binding.setCocktail(model.getCocktail().getValue());
         setFavouriteButtonBehaviour();
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
-        new ImageRequestQueue(this, imageView, model.getCocktail().getValue().getThumbnailUrl());
+        model.getRequestQueue().add(new ThumbnailRequest(
+                model.getCocktail().getValue().getThumbnailUrl(),
+                this,
+                imageView));
     }
 
 
     private void setFavouriteButtonBehaviour() {
         final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.button_favourites);
-        button.setColorFilter(getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setColorFilter(
+                ContextCompat.getColor(
+                        ShowCocktailActivity.this,
+                        R.color.colorPrimary),
+                PorterDuff.Mode.MULTIPLY);        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (model.isFavourite()) {
@@ -62,7 +63,11 @@ public class ShowCocktailActivity extends AppCompatActivity {
                     model.setFavourite(true);
                     button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
                 }
-                button.setColorFilter(getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+                button.setColorFilter(
+                        ContextCompat.getColor(
+                                ShowCocktailActivity.this,
+                                R.color.colorPrimary),
+                        PorterDuff.Mode.MULTIPLY);
             }
         });
     }

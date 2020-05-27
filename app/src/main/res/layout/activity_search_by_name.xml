@@ -10,7 +10,7 @@
         tools:context=".activities.SearchByNameActivity">
 
         <TextView
-            android:id="@+id/search_by_name"
+            android:id="@+id/search_cocktails_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
@@ -19,11 +19,13 @@
             android:text="Search cocktail by name"
             android:textAlignment="center"
             android:textColor="@color/colorOnPrimary"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!--Define an id attribute for RecyclerView-->
 
         <SearchView
             android:id="@+id/search_bar"
@@ -31,21 +33,22 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_marginStart="1dp"
+            android:layout_marginTop="20dp"
             android:background="@color/design_default_color_background"
             android:iconifiedByDefault="false"
             android:queryHint="@android:string/search_go"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.488"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_by_name" />
+            app:layout_constraintTop_toBottomOf="@+id/search_cocktails_title" />
 
-        <!--Define an id attribute for RecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktails_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             android:background="@color/colorSecondaryVariant"
             android:elevation="10dp"
+            android:isScrollContainer="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,8 +1,8 @@
 package com.gimmecocktail.http;
 
-import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
@@ -16,27 +16,18 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public final class RequestByIngredient extends CocktailRequestQueue {
-
-    public RequestByIngredient(Context context, MutableLiveData<List<Cocktail>> cocktails, String ingredient) {
-        super(context, cocktails);
-        JsonObjectRequest request = searchByIngredient(ingredient);
-        this.add(request);
-    }
-
-    private JsonObjectRequest searchByIngredient(String ingredient) {
-        final MutableLiveData<List<Cocktail>> mutableLiveData = getMutableLiveData();
-        return new JsonObjectRequest(
+public class ByIdRequest extends JsonObjectRequest {
+    public ByIdRequest(final String id, final MutableLiveData<List<Cocktail>> mutableLiveData) {
+        super(
                 Request.Method.GET,
-                this.urlByIngredient(ingredient),
+                "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
-                            List<Cocktail> cocktails = cocktailSequenceFrom(cocktailResponse);
-                            Log.d("ApiTest", "Response: " + cocktails.toString());
-                            mutableLiveData.setValue(cocktails);
+                            List<Cocktail> cocktails = CocktailRequests.cocktailSequenceFrom(cocktailResponse);
+                            mutableLiveData.getValue().addAll(cocktails);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -49,9 +40,5 @@ public final class RequestByIngredient extends CocktailRequestQueue {
                         error.printStackTrace();
                     }
                 });
-    }
-
-    private String urlByIngredient(String ingredient) {
-        return "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + ingredient;
     }
 }

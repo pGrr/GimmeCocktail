@@ -3,18 +3,34 @@ package com.gimmecocktail.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.http.CocktailRequestQueue;
 
-public class ShowCocktailViewModel extends ViewModel {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShowCocktailViewModel extends AndroidViewModel {
 
     private MutableLiveData<Cocktail> cocktail = new MutableLiveData<>();
     private boolean isFavourite = false;
+    private CocktailRequestQueue<Cocktail> requestQueue;
+
+    public ShowCocktailViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void setCocktail(Cocktail cocktail) {
         this.cocktail.setValue(cocktail);
+    }
+
+    public CocktailRequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+
+            requestQueue = new CocktailRequestQueue(getApplication().getApplicationContext(), getCocktail());
+        }
+        return requestQueue;
     }
 
     public boolean isFavourite() {

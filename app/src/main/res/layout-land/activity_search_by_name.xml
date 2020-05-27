@@ -8,7 +8,7 @@
     tools:context=".activities.SearchByNameActivity">
 
     <TextView
-        android:id="@+id/search_by_name"
+        android:id="@+id/search_cocktails_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_by_name" />
+        app:layout_constraintTop_toBottomOf="@+id/search_cocktails_title" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

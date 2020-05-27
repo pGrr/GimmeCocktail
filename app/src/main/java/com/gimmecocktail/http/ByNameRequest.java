@@ -1,8 +1,8 @@
 package com.gimmecocktail.http;
 
-import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
@@ -16,25 +16,18 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public final class RequestByName extends CocktailRequestQueue {
+public class ByNameRequest extends JsonObjectRequest {
 
-    public RequestByName(Context context, MutableLiveData<List<Cocktail>> cocktails, String name) {
-        super(context, cocktails);
-        JsonObjectRequest request = searchByName(name);
-        this.add(request);
-    }
-
-    private JsonObjectRequest searchByName(String name) {
-        final MutableLiveData<List<Cocktail>> mutableLiveData = getMutableLiveData();
-        return new JsonObjectRequest(
+    public ByNameRequest(final String name, final MutableLiveData<List<Cocktail>> mutableLiveData) {
+        super(
                 Request.Method.GET,
-                this.urlByName(name),
+                "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + name,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
-                            List<Cocktail> cocktails = cocktailSequenceFrom(cocktailResponse);
+                            List<Cocktail> cocktails = CocktailRequests.cocktailSequenceFrom(cocktailResponse);
                             mutableLiveData.setValue(cocktails);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -48,9 +41,5 @@ public final class RequestByName extends CocktailRequestQueue {
                         error.printStackTrace();
                     }
                 });
-    }
-
-    private String urlByName(String name) {
-        return "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + name;
     }
 }
