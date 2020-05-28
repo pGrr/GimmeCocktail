@@ -7,9 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import com.gimmecocktail.Cocktail;
 import com.gimmecocktail.http.CocktailRequestQueue;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.gimmecocktail.http.OneRandomRequest;
 
 public class ShowCocktailViewModel extends AndroidViewModel {
 
@@ -23,6 +21,10 @@ public class ShowCocktailViewModel extends AndroidViewModel {
 
     public void setCocktail(Cocktail cocktail) {
         this.cocktail.setValue(cocktail);
+    }
+
+    public void setRandomCocktail() {
+        getRequestQueue().add(new OneRandomRequest(getCocktail()));
     }
 
     public CocktailRequestQueue getRequestQueue() {

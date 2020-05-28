@@ -48,7 +48,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
 
 
     private void setFavouriteButtonBehaviour() {
-        final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.button_favourites);
+        final FloatingActionButton button = findViewById(R.id.button_favourites);
         button.setColorFilter(
                 ContextCompat.getColor(
                         ShowCocktailActivity.this,

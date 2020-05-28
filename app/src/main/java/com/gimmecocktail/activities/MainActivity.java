@@ -20,10 +20,10 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void setRoutes() {
-        Button byName = (Button) findViewById(R.id.button_by_name);
-        Button byIngredient = (Button) findViewById(R.id.button_by_ingredient);
-        Button random = (Button) findViewById(R.id.button_discover_random);
-        Button favourites = (Button) findViewById(R.id.button_favourites);
+        Button byName = findViewById(R.id.button_by_name);
+        Button byIngredient = findViewById(R.id.button_by_ingredient);
+        Button random = findViewById(R.id.button_discover_random);
+        Button favourites = findViewById(R.id.button_favourites);
         startOnClick(byName, SearchByNameActivity.class);
         startOnClick(byIngredient, SearchByIngredientActivity.class);
         startOnClick(random, SearchRandomActivity.class);

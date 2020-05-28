@@ -63,7 +63,7 @@ public final class Cocktail implements Parcelable {
     }
 
     private String convertIngredients(Map<String,String> ingredientsMap) {
-        String ingredients = new String();
+        String ingredients = "";
         for (Map.Entry<String,String> ingredient: ingredientsMap.entrySet()) {
             ingredients += ingredient.getKey();
             if (!ingredient.getValue().equals("null")) {
@@ -78,7 +78,7 @@ public final class Cocktail implements Parcelable {
     }
 
     public String getTypeCategoryAndGlassAsString() {
-        String s = new String();
+        String s = "";
         s += "Type: " + this.getType() + "\n";
         s += "Category: " + this.getCategory() + "\n";
         s += "Glass: " + this.getGlass() + "\n";

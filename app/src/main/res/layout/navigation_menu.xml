@@ -32,7 +32,7 @@
             app:icon="@android:drawable/ic_menu_search"
             app:iconGravity="textStart"
             app:iconPadding="10dp"
-            app:iconTint="@color/colorAccent" />
+            app:iconTint="@color/colorOnPrimary" />
 
         <Button
             android:id="@+id/button_by_ingredient"
@@ -52,7 +52,7 @@
             app:icon="@android:drawable/ic_menu_search"
             app:iconGravity="textStart"
             app:iconPadding="10dp"
-            app:iconTint="@color/ic_launcher_background"
+            app:iconTint="@color/colorOnPrimary"
             app:rippleColor="@color/colorAccent" />
 
         <Button
