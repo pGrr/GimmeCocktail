@@ -2,14 +2,13 @@ package com.gimmecocktail.http;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.model.Cocktail;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +26,7 @@ public class ByNameRequest extends JsonObjectRequest {
                     @Override
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
-                            List<Cocktail> cocktails = CocktailRequests.cocktailSequenceFrom(cocktailResponse);
+                            List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(cocktailResponse);
                             mutableLiveData.setValue(cocktails);
                         } catch (JSONException e) {
                             e.printStackTrace();

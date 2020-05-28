@@ -1,27 +1,39 @@
-package com.gimmecocktail;
+package com.gimmecocktail.model;
 
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.util.Map;
 
+@Entity
 public final class Cocktail implements Parcelable {
+    @Ignore
     public static final int N_MAX_INGREDIENTS = 15;
 
+    @PrimaryKey @NonNull
+    private final String id; //strId
+
     private final String name; // strDrink
-    private final String type; // strAlcoholic
-    private final String category; // strCategory
+    private final String genericInfo; // strAlcoholic
     private final String thumbnailUrl; // strDrinkThumb
-    private final String glass; // strGlass
     private final String ingredients; // { strIngredient1 => strMeasure1, ...}
     private final String instructions; // strInstructions
 
+    public Cocktail(String id, String name, String genericInfo, String thumbnailUrl, String ingredients, String instructions) {
+        this.id = id;
+        this.name = name;
+        this.genericInfo = genericInfo;
+        this.thumbnailUrl = thumbnailUrl;
+        this.ingredients = ingredients;
+        this.instructions = instructions;
+    }
+
     public Cocktail(
+            String id,
             String name,
             String type,
             String category,
@@ -29,33 +41,24 @@ public final class Cocktail implements Parcelable {
             String thumbnailUrl,
             String glass,
             String instructions) {
+        this.id = id;
         this.name = name;
-        this.type = type;
-        this.category = category;
+        this.genericInfo = createGenericInfo(type, category, glass);
         this.thumbnailUrl = thumbnailUrl;
-        this.glass = glass;
         this.ingredients = convertIngredients(ingredients);
         this.instructions = instructions;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
     public String getThumbnailUrl() {
         return thumbnailUrl;
-    }
-
-    public String getGlass() {
-        return glass;
     }
 
     public String getIngredients() {
@@ -63,39 +66,42 @@ public final class Cocktail implements Parcelable {
     }
 
     private String convertIngredients(Map<String,String> ingredientsMap) {
-        String ingredients = "";
+        StringBuilder ingredients = new StringBuilder();
         for (Map.Entry<String,String> ingredient: ingredientsMap.entrySet()) {
-            ingredients += ingredient.getKey();
+            ingredients.append(ingredient.getKey());
             if (!ingredient.getValue().equals("null")) {
-                ingredients += ": " + ingredient.getValue() + "\n";
+                ingredients.append(": ").append(ingredient.getValue()).append("\n");
             }
         }
-        return ingredients;
+        return ingredients.toString();
     }
 
     public String getInstructions() {
         return instructions;
     }
 
-    public String getTypeCategoryAndGlassAsString() {
+    public String getGenericInfo() {
+        return genericInfo;
+    }
+
+    private String createGenericInfo(String type, String category, String glass) {
         String s = "";
-        s += "Type: " + this.getType() + "\n";
-        s += "Category: " + this.getCategory() + "\n";
-        s += "Glass: " + this.getGlass() + "\n";
+        s += "Type: " + type + "\n";
+        s += "Category: " + category + "\n";
+        s += "Glass: " + glass + "\n";
         return s;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Cocktail: { "
-                + "name: " + this.name + "; "
-                + "type: " + this.type + "; "
-                + "category: " + this.category + "; "
-                + "glass: " + this.glass + "; "
-                + "name: " + this.name + "; "
-                + "ingredients: " + this.ingredients + "; "
-                + "instructions: " + this.instructions + "; "
+        return "{ "
+                + "id: \"" + this.id + "\", "
+                + "name: \"" + this.name + "\", "
+                + "thumbnailUrl: \"" + this.thumbnailUrl + "\", "
+                + "genericInfo: \"" + this.genericInfo + "\", "
+                + "ingredients: \"" + this.ingredients + "\", "
+                + "instructions: \"" + this.instructions + "\""
                 + " }";
     }
 
@@ -116,22 +122,20 @@ public final class Cocktail implements Parcelable {
     };
 
     public Cocktail(Parcel in){
+        this.id = in.readString();
         this.name = in.readString();
-        this.type = in.readString();
-        this.category = in.readString();
         this.thumbnailUrl = in.readString();
-        this.glass = in.readString();
+        this.genericInfo = in.readString();
         this.ingredients = in.readString();
         this.instructions = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(name);
-        dest.writeString(type);
-        dest.writeString(category);
         dest.writeString(thumbnailUrl);
-        dest.writeString(glass);
+        dest.writeString(genericInfo);
         dest.writeString(ingredients);
         dest.writeString(instructions);
     }

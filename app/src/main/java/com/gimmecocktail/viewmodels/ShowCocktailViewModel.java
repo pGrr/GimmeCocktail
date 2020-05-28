@@ -1,49 +1,39 @@
 package com.gimmecocktail.viewmodels;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import com.gimmecocktail.Cocktail;
-import com.gimmecocktail.http.CocktailRequestQueue;
-import com.gimmecocktail.http.OneRandomRequest;
+import androidx.lifecycle.ViewModel;
+import com.gimmecocktail.model.Cocktail;
 
-public class ShowCocktailViewModel extends AndroidViewModel {
+public class ShowCocktailViewModel extends ViewModel {
 
-    private MutableLiveData<Cocktail> cocktail = new MutableLiveData<>();
-    private boolean isFavourite = false;
-    private CocktailRequestQueue<Cocktail> requestQueue;
+    private MutableLiveData<Cocktail> cocktail;
+    private MutableLiveData<Boolean> isFavourite;
 
-    public ShowCocktailViewModel(@NonNull Application application) {
-        super(application);
+    public ShowCocktailViewModel() {
+        super();
+    }
+
+    public MutableLiveData<Cocktail> getCocktail() {
+        if (cocktail == null) {
+            cocktail = new MutableLiveData<>();
+        }
+        return cocktail;
     }
 
     public void setCocktail(Cocktail cocktail) {
         this.cocktail.setValue(cocktail);
     }
 
-    public void setRandomCocktail() {
-        getRequestQueue().add(new OneRandomRequest(getCocktail()));
-    }
-
-    public CocktailRequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-
-            requestQueue = new CocktailRequestQueue(getApplication().getApplicationContext(), getCocktail());
+    public MutableLiveData<Boolean> isFavourite() {
+        if (isFavourite == null) {
+            isFavourite = new MutableLiveData<>();
+            isFavourite.setValue(false);
         }
-        return requestQueue;
-    }
-
-    public boolean isFavourite() {
         return isFavourite;
     }
 
-    public void setFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
+    public void setIsFavourite(boolean isFavourite) {
+        this.isFavourite.setValue(isFavourite);
     }
 
-    public MutableLiveData<Cocktail> getCocktail() {
-        return cocktail;
-    }
 }

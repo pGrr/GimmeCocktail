@@ -1,16 +1,23 @@
 package com.gimmecocktail.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import androidx.lifecycle.MutableLiveData;
+import com.gimmecocktail.viewmodels.SearchViewModel;
 
-import com.gimmecocktail.R;
+public class FavouritesActivity extends AbstractSearchCocktailsActivity {
 
-public class FavouritesActivity extends AppCompatActivity {
+    private MutableLiveData<Boolean> isFavourite;
+    private SearchViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
+        searchCocktails(null);
     }
+
+    @Override
+    protected void searchCocktails(String query) {
+        getQueryMaker().getAll(model.getCocktails());
+    }
+
 }

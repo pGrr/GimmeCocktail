@@ -7,7 +7,7 @@
     <data>
         <variable
             name="cocktail"
-            type="com.gimmecocktail.Cocktail" />
+            type="com.gimmecocktail.model.Cocktail" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,23 +41,6 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_favourites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:baselineAlignBottom="false"
-                android:clickable="true"
-                android:elevation="10dp"
-                app:backgroundTint="@color/colorOnPrimary"
-                app:elevation="10dp"
-                app:fabSize="normal"
-                app:maxImageSize="30dp"
-                app:srcCompat="@drawable/ic_favorite_border_white_24dp"
-                app:tint="@color/colorPrimary" />
         </LinearLayout>
 
         <ScrollView
@@ -65,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -75,9 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="10dp"
-                app:cardUseCompatPadding="true"
                 app:cardElevation="10dp"
-                app:cardMaxElevation="10dp">
+                app:cardMaxElevation="10dp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text='@{cocktail.getTypeCategoryAndGlassAsString(), default=Cocktail_type}'
+                        android:text="@{cocktail.genericInfo, default=Cocktail_type}"
                         android:textSize="18sp" />
 
                     <TextView
@@ -148,6 +131,37 @@
 
             </com.google.android.material.card.MaterialCardView>
         </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_favourites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:baselineAlignBottom="false"
+                android:clickable="true"
+                android:elevation="10dp"
+                app:backgroundTint="@color/colorOnPrimary"
+                app:elevation="10dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="30dp"
+                app:srcCompat="@drawable/ic_favorite_border_white_24dp"
+                app:tint="@color/colorPrimary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

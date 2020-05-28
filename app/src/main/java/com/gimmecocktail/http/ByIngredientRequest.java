@@ -8,13 +8,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.model.Cocktail;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ByIngredientRequest extends JsonObjectRequest {

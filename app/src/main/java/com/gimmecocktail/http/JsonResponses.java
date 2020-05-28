@@ -1,6 +1,6 @@
 package com.gimmecocktail.http;
 
-import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.model.Cocktail;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CocktailRequests {
+public class JsonResponses {
 
     public static List<Cocktail> cocktailSequenceFrom(JSONObject jsonCocktails) throws JSONException {
         List<Cocktail> cocktails = new ArrayList<>();
@@ -33,6 +33,7 @@ public class CocktailRequests {
         }
         String imageUrl = jsonCocktail.getString("strDrinkThumb");
         return new Cocktail(
+                jsonCocktail.getString("idDrink"),
                 jsonCocktail.getString("strDrink"),
                 jsonCocktail.getString("strAlcoholic"),
                 jsonCocktail.getString("strCategory"),

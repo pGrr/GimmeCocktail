@@ -6,7 +6,7 @@
     <data>
         <variable
             name="cocktail"
-            type="com.gimmecocktail.Cocktail" />
+            type="com.gimmecocktail.model.Cocktail" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

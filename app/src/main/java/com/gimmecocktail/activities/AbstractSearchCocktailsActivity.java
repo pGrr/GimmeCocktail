@@ -11,10 +11,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.http.CocktailRequestQueue;
+import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.adapters.CocktailsAdapter;
 import com.gimmecocktail.databinding.ActivitySearchByNameBinding;
+import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.viewmodels.SearchViewModel;
 import java.util.List;
 import java.util.Objects;
@@ -23,18 +25,35 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
 
     private SearchViewModel model;
     private ActivitySearchByNameBinding binding;
+    private CocktailRequestQueue requestQueue;
+    private CocktailQueryMaker queryMaker;
 
     public SearchViewModel getModel() {
         return model;
+    }
+
+    public CocktailRequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = new CocktailRequestQueue<>(getApplication().getApplicationContext(), model.getCocktails());
+        }
+        return requestQueue;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setModel();
+        setRequestQueue();
         setUpRecyclerView();
         setModelObserver();
         setOnQueryTextListener();
+    }
+
+    public CocktailQueryMaker getQueryMaker() {
+        if (this.queryMaker == null) {
+            this.queryMaker = new CocktailQueryMaker(this);
+        }
+        return this.queryMaker;
     }
 
     private void setUpRecyclerView() {
@@ -51,6 +70,10 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         this.model = new ViewModelProvider(this).get(SearchViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_by_name);
         this.binding.setLifecycleOwner(this);
+    }
+
+    private void setRequestQueue() {
+        this.requestQueue = new CocktailRequestQueue<>(this, model.getCocktails());
     }
 
     private void setModelObserver() {
@@ -112,4 +135,5 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
     }
 
     protected abstract void searchCocktails(String query);
+
 }

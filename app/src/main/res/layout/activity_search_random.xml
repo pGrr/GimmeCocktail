@@ -7,7 +7,7 @@
     <data>
         <variable
             name="cocktail"
-            type="com.gimmecocktail.Cocktail" />
+            type="com.gimmecocktail.model.Cocktail" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,32 +16,18 @@
         android:background="@color/colorSecondaryVariant"
         tools:context=".activities.SearchRandomActivity">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/refresh_random_cocktail_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:clickable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:srcCompat="@android:drawable/ic_menu_rotate" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
@@ -51,37 +37,24 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_favourites"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:baselineAlignBottom="false"
-                android:clickable="true"
-                android:elevation="10dp"
-                app:backgroundTint="@color/colorOnPrimary"
-                app:elevation="10dp"
-                app:fabSize="normal"
-                app:maxImageSize="30dp"
-                app:srcCompat="@drawable/ic_favorite_border_white_24dp"
-                app:tint="@color/colorPrimary" />
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:padding="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/refresh_random_cocktail_button">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
@@ -95,6 +68,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorOnPrimary"
                     android:elevation="10dp"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -112,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text='@{cocktail.getTypeCategoryAndGlassAsString(), default=Cocktail_type}'
+                        android:text="@{cocktail.genericInfo, default=Cocktail_type}"
                         android:textSize="18sp" />
 
                     <TextView
@@ -161,6 +135,58 @@
 
             </com.google.android.material.card.MaterialCardView>
         </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button_favourites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:baselineAlignBottom="false"
+                android:clickable="true"
+                android:elevation="10dp"
+                app:backgroundTint="@color/colorOnPrimary"
+                app:elevation="10dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="30dp"
+                app:srcCompat="@drawable/ic_favorite_border_white_24dp"
+                app:tint="@color/colorPrimary" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/refresh_random_cocktail_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:tint="@color/colorPrimary"
+                app:backgroundTint="@color/colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="30dp"
+                app:srcCompat="@drawable/ic_autorenew_white_18dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

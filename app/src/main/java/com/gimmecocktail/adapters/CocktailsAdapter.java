@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gimmecocktail.Cocktail;
+import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.databinding.CocktailCardBinding;
 
 import java.util.List;
