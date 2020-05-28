@@ -32,8 +32,8 @@ public class SearchRandomActivity extends ShowCocktailActivity {
         super.onCreate(savedInstanceState);
         setModel();
         setModelObserver();
-        setFavouriteButtonBehaviour();
         setRandomCocktail();
+        setFavouriteButtonBehaviour();
         setRefreshButtonBehaviour();
     }
 
@@ -62,7 +62,7 @@ public class SearchRandomActivity extends ShowCocktailActivity {
         if (getIntent().hasExtra("cocktail")) {
             Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
-            checkIsFavourite();
+            checkIsFavourite(cocktail);
             setThumbnail();
         }
         binding.setCocktail(model.getCocktail().getValue());
@@ -74,9 +74,15 @@ public class SearchRandomActivity extends ShowCocktailActivity {
             @Override
             public void onChanged(Cocktail cocktail) {
                 binding.setCocktail(cocktail);
-                checkIsFavourite();
+                checkIsFavourite(cocktail);
                 setThumbnail();
                 binding.executePendingBindings();
+            }
+        });
+        model.isFavourite().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isFavourite) {
+                setFavourite(isFavourite);
             }
         });
     }
@@ -88,24 +94,24 @@ public class SearchRandomActivity extends ShowCocktailActivity {
             @Override
             public void onClick(View v) {
                 setFavourite(!model.isFavourite().getValue());
+                checkIsFavourite(getModel().getCocktail().getValue());
             }
         });
     }
 
-    protected void checkIsFavourite() {
-        getQueryMaker().exists(model.getCocktail().getValue().getId(), model.isFavourite());
+    protected void checkIsFavourite(Cocktail cocktail) {
+        getQueryMaker().exists(cocktail.getId(), model.isFavourite());
     }
 
     protected void setFavourite(boolean isFavourite) {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
         if (isFavourite) {
-            getQueryMaker().insertAll(model.getCocktail().getValue());
+            getQueryMaker().insertAll(getModel().getCocktail().getValue());
             button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
-        } else if (this.model.isFavourite().getValue()) {
+        } else {
             getQueryMaker().delete(model.getCocktail().getValue());
             button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
         }
-        this.model.setIsFavourite(isFavourite);
     }
 
     protected void setButtonColor(FloatingActionButton button, int colorId) {
@@ -119,7 +125,7 @@ public class SearchRandomActivity extends ShowCocktailActivity {
     protected void setThumbnail() {
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
         getRequestQueue().add(new ThumbnailRequest(
-                model.getCocktail().getValue().getThumbnailUrl(),
+                getModel().getCocktail().getValue().getThumbnailUrl(),
                 this,
                 imageView));
     }

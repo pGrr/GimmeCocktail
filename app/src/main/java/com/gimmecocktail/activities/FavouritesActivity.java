@@ -37,6 +37,12 @@ public class FavouritesActivity extends AppCompatActivity {
         binding.executePendingBindings();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        searchCocktails();
+    }
+
     public CocktailQueryMaker getQueryMaker() {
         if (this.queryMaker == null) {
             this.queryMaker = new CocktailQueryMaker(this);
