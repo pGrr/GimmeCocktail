@@ -28,6 +28,7 @@ public class ByIdRequest extends JsonObjectRequest {
                         try {
                             List<Cocktail> cocktails = CocktailRequests.cocktailSequenceFrom(cocktailResponse);
                             mutableLiveData.getValue().addAll(cocktails);
+                            mutableLiveData.setValue(mutableLiveData.getValue());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
