@@ -36,7 +36,6 @@ public class ShowCocktailActivity extends AppCompatActivity {
         setModel();
         setModelObserver();
         setFavouriteButtonBehaviour();
-        checkIsFavourite();
     }
 
     public ShowCocktailViewModel getModel() {
@@ -64,6 +63,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         if (getIntent().hasExtra("cocktail")) {
             Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
+            checkIsFavourite();
             setThumbnail();
         }
         binding.setCocktail(model.getCocktail().getValue());

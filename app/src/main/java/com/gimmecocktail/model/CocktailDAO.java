@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface CocktailDAO {
 
-    @Query("SELECT * FROM Cocktail")
+    @Query("SELECT * FROM cocktail")
     List<Cocktail> getAll();
 
     @Query("SELECT * FROM Cocktail WHERE id = :id")

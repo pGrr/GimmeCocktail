@@ -1,18 +1,10 @@
 package com.gimmecocktail.model;
 
 import android.content.Context;
-import android.os.AsyncTask;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
-
-import com.gimmecocktail.activities.FavouritesActivity;
-
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
 
 public class CocktailQueryMaker {
 
@@ -26,10 +18,10 @@ public class CocktailQueryMaker {
     }
 
     public void getAll(final MutableLiveData<List<Cocktail>> result) {
-        forkJoinPool.submit(new Runnable() {
+        forkJoinPool.execute(new Runnable() {
             @Override
             public void run() {
-                result.setValue(daoInstance.getAll());
+                result.postValue(daoInstance.getAll());
             }
         });
     }
@@ -38,7 +30,7 @@ public class CocktailQueryMaker {
         forkJoinPool.submit(new Runnable() {
             @Override
             public void run() {
-                result.setValue(daoInstance.idExists(id));
+                result.postValue(daoInstance.idExists(id));
             }
         });
     }
@@ -47,7 +39,7 @@ public class CocktailQueryMaker {
         forkJoinPool.submit(new Runnable() {
             @Override
             public void run() {
-                result.setValue(daoInstance.getById(id));
+                result.postValue(daoInstance.getById(id));
             }
         });
     }

@@ -62,6 +62,7 @@ public class SearchRandomActivity extends ShowCocktailActivity {
         if (getIntent().hasExtra("cocktail")) {
             Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
+            checkIsFavourite();
             setThumbnail();
         }
         binding.setCocktail(model.getCocktail().getValue());
