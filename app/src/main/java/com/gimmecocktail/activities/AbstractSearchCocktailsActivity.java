@@ -15,7 +15,7 @@ import com.gimmecocktail.http.CocktailRequestQueue;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.adapters.CocktailsAdapter;
-import com.gimmecocktail.databinding.ActivitySearchByNameBinding;
+import com.gimmecocktail.databinding.ActivitySearchCocktailsBinding;
 import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.viewmodels.SearchViewModel;
 import java.util.List;
@@ -24,15 +24,15 @@ import java.util.Objects;
 public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity {
 
     private SearchViewModel model;
-    private ActivitySearchByNameBinding binding;
+    private ActivitySearchCocktailsBinding binding;
     private CocktailRequestQueue requestQueue;
     private CocktailQueryMaker queryMaker;
 
-    public SearchViewModel getModel() {
+    SearchViewModel getModel() {
         return model;
     }
 
-    public CocktailRequestQueue getRequestQueue() {
+    CocktailRequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = new CocktailRequestQueue<>(getApplication().getApplicationContext(), model.getCocktails());
         }
@@ -68,7 +68,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
 
     private void setModel() {
         this.model = new ViewModelProvider(this).get(SearchViewModel.class);
-        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_by_name);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_cocktails);
         this.binding.setLifecycleOwner(this);
     }
 
@@ -129,7 +129,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         });
     }
 
-    protected void setTitle(String title) {
+    void setTitle(String title) {
         TextView textView = findViewById(R.id.search_cocktails_title);
         textView.setText(title);
     }

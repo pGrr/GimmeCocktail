@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonResponses {
+class JsonResponses {
 
     public static List<Cocktail> cocktailSequenceFrom(JSONObject jsonCocktails) throws JSONException {
         List<Cocktail> cocktails = new ArrayList<>();
@@ -22,7 +22,7 @@ public class JsonResponses {
         return cocktails;
     }
 
-    public static Cocktail cocktailFrom(JSONObject jsonCocktail) throws JSONException {
+    private static Cocktail cocktailFrom(JSONObject jsonCocktail) throws JSONException {
         Map<String,String> ingredients = new LinkedHashMap<>();
         for (int i=1; i<Cocktail.N_MAX_INGREDIENTS; i++) {
             String ingredient = jsonCocktail.getString("strIngredient" + i);

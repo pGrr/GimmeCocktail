@@ -73,7 +73,7 @@ public final class Cocktail implements Parcelable {
                 ingredients.append(": ").append(ingredient.getValue()).append("\n");
             }
         }
-        return ingredients.toString();
+        return ingredients.toString().trim();
     }
 
     public String getInstructions() {
@@ -88,7 +88,7 @@ public final class Cocktail implements Parcelable {
         String s = "";
         s += "Type: " + type + "\n";
         s += "Category: " + category + "\n";
-        s += "Glass: " + glass + "\n";
+        s += "Glass: " + glass;
         return s;
     }
 

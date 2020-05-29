@@ -16,7 +16,7 @@
             android:background="@color/colorPrimary"
             android:elevation="10dp"
             android:padding="10dp"
-            android:text="@string/favourites_title"
+            android:text="@string/search_cocktails_title"
             android:textAlignment="center"
             android:textColor="@color/colorOnPrimary"
             android:textSize="30sp"
@@ -24,18 +24,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        
+        <SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/design_default_color_background"
+            android:iconifiedByDefault="false"
+            android:queryHint="@android:string/search_go"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_cocktails_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktails_recycler_view"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/max_card_width"
             android:layout_height="0dp"
             android:background="@color/colorSecondaryVariant"
             android:isScrollContainer="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_cocktails_title"
+            app:layout_constraintTop_toBottomOf="@+id/search_bar"
             tools:listitem="@layout/cocktail_card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+

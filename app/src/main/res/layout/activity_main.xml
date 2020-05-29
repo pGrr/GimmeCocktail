@@ -8,30 +8,118 @@
     android:padding="20sp"
     tools:context=".activities.MainActivity">
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/logo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/logo_content_description"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        layout="@layout/navigation_menu"
-        android:layout_width="364dp"
-        android:layout_height="342dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.3" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+        <Button
+            android:id="@+id/button_by_name"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="@string/search_by_name_button_text"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_search_white_18dp"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconSize="30sp"
+            app:iconTint="@color/colorOnPrimary" />
+
+        <Button
+            android:id="@+id/button_by_ingredient"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:isScrollContainer="false"
+            android:padding="10dp"
+            android:text="@string/search_by_ingredient_button_text"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_search_white_18dp"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconSize="30sp"
+            app:iconTint="@color/colorOnPrimary"
+            app:rippleColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button_discover_random"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="@string/discover_random_button_text"
+            android:textColor="@color/colorOnPrimary"
+            android:textColorLink="@color/colorAccent"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_autorenew_white_18dp"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconSize="30sp"
+            app:iconTint="@color/colorOnPrimary" />
+
+        <Button
+            android:id="@+id/button_favourites"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/design_default_color_primary"
+            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTintMode="add"
+            android:padding="10dp"
+            android:text="@string/favourites_button_text"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_favorite_border_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="10dp"
+            app:iconSize="30sp"
+            app:iconTint="@color/colorOnPrimary" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

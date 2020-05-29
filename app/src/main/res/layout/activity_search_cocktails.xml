@@ -15,17 +15,15 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:elevation="10dp"
-            android:padding="20dp"
-            android:text="Search cocktail by name"
+            android:padding="10dp"
+            android:text="@string/search_cocktails_title"
             android:textAlignment="center"
             android:textColor="@color/colorOnPrimary"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <!--Define an id attribute for RecyclerView-->
 
         <SearchView
             android:id="@+id/search_bar"

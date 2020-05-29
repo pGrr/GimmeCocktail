@@ -9,8 +9,8 @@ import java.util.concurrent.ForkJoinPool;
 public class CocktailQueryMaker {
 
     private final static String NAME = "cocktails";
-    private CocktailDAO daoInstance;
-    private ForkJoinPool forkJoinPool;
+    private final CocktailDAO daoInstance;
+    private final ForkJoinPool forkJoinPool;
 
     public CocktailQueryMaker(Context context) {
         this.forkJoinPool = new ForkJoinPool();

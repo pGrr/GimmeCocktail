@@ -129,7 +129,7 @@ public class SearchRandomActivity extends ShowCocktailActivity {
                 this,
                 imageView));
     }
-    public void setRandomCocktail() {
+    private void setRandomCocktail() {
         getRequestQueue().add(new OneRandomRequest(getModel().getCocktail()));
     }
 

@@ -38,25 +38,25 @@ public class ShowCocktailActivity extends AppCompatActivity {
         setFavouriteButtonBehaviour();
     }
 
-    public ShowCocktailViewModel getModel() {
+    ShowCocktailViewModel getModel() {
         return model;
     }
 
-    public CocktailQueryMaker getQueryMaker() {
+    CocktailQueryMaker getQueryMaker() {
         if (queryMaker == null) {
             queryMaker = new CocktailQueryMaker(this);
         }
         return queryMaker;
     }
 
-    public CocktailRequestQueue getRequestQueue() {
+    CocktailRequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = new CocktailRequestQueue<>(this, model.getCocktail());
         }
         return requestQueue;
     }
 
-    protected void setModel() {
+    void setModel() {
         this.model = new ViewModelProvider(this).get(ShowCocktailViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_show_cocktail);
         this.binding.setLifecycleOwner(this);
@@ -67,7 +67,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         }
     }
 
-    protected void setModelObserver() {
+    void setModelObserver() {
         model.getCocktail().observe(this, new Observer<Cocktail>() {
             @Override
             public void onChanged(Cocktail cocktail) {
@@ -85,7 +85,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         });
     }
 
-    protected void setFavouriteButtonBehaviour() {
+    void setFavouriteButtonBehaviour() {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
         setButtonColor(button, R.color.colorPrimary);
         button.setOnClickListener(new View.OnClickListener() {
@@ -97,11 +97,11 @@ public class ShowCocktailActivity extends AppCompatActivity {
         });
     }
 
-    protected void checkIsFavourite(Cocktail cocktail) {
+    void checkIsFavourite(Cocktail cocktail) {
         getQueryMaker().exists(cocktail.getId(), model.isFavourite());
     }
 
-    protected void setFavourite(boolean isFavourite) {
+    void setFavourite(boolean isFavourite) {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
         if (isFavourite) {
             getQueryMaker().insertAll(model.getCocktail().getValue());
@@ -112,7 +112,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         }
     }
 
-    protected void setButtonColor(FloatingActionButton button, int colorId) {
+    void setButtonColor(FloatingActionButton button, int colorId) {
         button.setColorFilter(
                 ContextCompat.getColor(
                         ShowCocktailActivity.this,
@@ -120,7 +120,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
                 PorterDuff.Mode.MULTIPLY);
     }
 
-    protected void setThumbnail() {
+    void setThumbnail() {
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
         getRequestQueue().add(new ThumbnailRequest(
                 model.getCocktail().getValue().getThumbnailUrl(),

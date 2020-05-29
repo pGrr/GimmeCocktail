@@ -23,7 +23,7 @@ public class FavouritesActivity extends AppCompatActivity {
     private ActivityFavouritesBinding binding;
     private CocktailQueryMaker queryMaker;
 
-    public SearchViewModel getModel() {
+    private SearchViewModel getModel() {
         return model;
     }
 
@@ -43,7 +43,7 @@ public class FavouritesActivity extends AppCompatActivity {
         searchCocktails();
     }
 
-    public CocktailQueryMaker getQueryMaker() {
+    private CocktailQueryMaker getQueryMaker() {
         if (this.queryMaker == null) {
             this.queryMaker = new CocktailQueryMaker(this);
         }
@@ -99,7 +99,7 @@ public class FavouritesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void searchCocktails() {
+    private void searchCocktails() {
         getQueryMaker().getAll(getModel().getCocktails());
     }
 

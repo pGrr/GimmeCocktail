@@ -27,7 +27,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cocktails_recycler_view"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/max_card_width"
             android:layout_height="0dp"
             android:background="@color/colorSecondaryVariant"
             android:isScrollContainer="true"

@@ -2,4 +2,14 @@
     <string name="app_name">GimmeCocktail</string>
     <string name="search_cocktail_by_name_title">Search cocktail by name</string>
     <string name="search_cocktail_by_ingredient_title">Search cocktail by ingredient</string>
+    <string name="favourites_title">Favourites</string>
+    <string name="search_by_name_button_text">by name</string>
+    <string name="search_by_ingredient_button_text">by ingredient</string>
+    <string name="discover_random_button_text">Discover random</string>
+    <string name="favourites_button_text">Favourites</string>
+    <string name="logo_content_description">Logo</string>
+    <string name="search_cocktails_title">Search cocktails</string>
+    <string name="cocktail_thumbnail_picture">Cocktail thumbnail picture</string>
+    <string name="ingredients_section_title">Ingredients</string>
+    <string name="instructions_section_title">Instructions</string>
 </resources>

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class ByIdRequest extends JsonObjectRequest {
+class ByIdRequest extends JsonObjectRequest {
     public ByIdRequest(final String id, final MutableLiveData<List<Cocktail>> mutableLiveData) {
         super(
                 Request.Method.GET,
