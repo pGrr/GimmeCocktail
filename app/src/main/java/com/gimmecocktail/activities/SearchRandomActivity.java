@@ -1,5 +1,6 @@
 package com.gimmecocktail.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -8,23 +9,26 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import com.gimmecocktail.http.CocktailRequestQueue;
+import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.OneRandomRequest;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivitySearchRandomBinding;
 import com.gimmecocktail.http.ThumbnailRequest;
 import com.gimmecocktail.model.CocktailQueryMaker;
-import com.gimmecocktail.viewmodels.ShowCocktailViewModel;
+import com.gimmecocktail.viewmodels.CocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.Objects;
 
-public class SearchRandomActivity extends ShowCocktailActivity {
+/**
+ * Activity that queries the API with a get-random-cocktail request
+ * and shows the result.
+ */
+public class SearchRandomActivity extends AppCompatActivity {
 
     private ActivitySearchRandomBinding binding;
-    private ShowCocktailViewModel model;
-    private CocktailRequestQueue requestQueue;
+    private CocktailViewModel model;
+    private ApiRequestQueue requestQueue;
     private CocktailQueryMaker queryMaker;
 
     @Override
@@ -37,39 +41,22 @@ public class SearchRandomActivity extends ShowCocktailActivity {
         setRefreshButtonBehaviour();
     }
 
-    public ShowCocktailViewModel getModel() {
-        return model;
-    }
-
-    public CocktailQueryMaker getQueryMaker() {
-        if (queryMaker == null) {
-            queryMaker = new CocktailQueryMaker(this);
-        }
-        return queryMaker;
-    }
-
-    public CocktailRequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            requestQueue = new CocktailRequestQueue<>(this, model.getCocktail());
-        }
-        return requestQueue;
-    }
-
-    protected void setModel() {
-        this.model = new ViewModelProvider(this).get(ShowCocktailViewModel.class);
+    private void setModel() {
+        this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_random);
         this.binding.setLifecycleOwner(this);
         if (getIntent().hasExtra("cocktail")) {
-            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
+            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras())
+                    .getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
-            checkIsFavourite(cocktail);
+            checkIsFavourite(Objects.requireNonNull(cocktail));
             setThumbnail();
         }
         binding.setCocktail(model.getCocktail().getValue());
         binding.executePendingBindings();
     }
 
-    protected void setModelObserver() {
+    private void setModelObserver() {
         model.getCocktail().observe(this, new Observer<Cocktail>() {
             @Override
             public void onChanged(Cocktail cocktail) {
@@ -87,50 +74,21 @@ public class SearchRandomActivity extends ShowCocktailActivity {
         });
     }
 
-    protected void setFavouriteButtonBehaviour() {
+    private void setRandomCocktail() {
+        getRequestQueue().add(new OneRandomRequest(model.getCocktail()));
+    }
+
+    private void setFavouriteButtonBehaviour() {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
-        setButtonColor(button, R.color.colorPrimary);
+        setButtonColor(button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFavourite(!model.isFavourite().getValue());
-                checkIsFavourite(getModel().getCocktail().getValue());
+                boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
+                setFavourite(!isFavourite);
+                checkIsFavourite(Objects.requireNonNull(model.getCocktail().getValue()));
             }
         });
-    }
-
-    protected void checkIsFavourite(Cocktail cocktail) {
-        getQueryMaker().exists(cocktail.getId(), model.isFavourite());
-    }
-
-    protected void setFavourite(boolean isFavourite) {
-        final FloatingActionButton button = findViewById(R.id.button_favourites);
-        if (isFavourite) {
-            getQueryMaker().insertAll(getModel().getCocktail().getValue());
-            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
-        } else {
-            getQueryMaker().delete(model.getCocktail().getValue());
-            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
-        }
-    }
-
-    protected void setButtonColor(FloatingActionButton button, int colorId) {
-        button.setColorFilter(
-                ContextCompat.getColor(
-                        SearchRandomActivity.this,
-                        colorId),
-                PorterDuff.Mode.MULTIPLY);
-    }
-
-    protected void setThumbnail() {
-        ImageView imageView = findViewById(R.id.cocktail_thumbnail);
-        getRequestQueue().add(new ThumbnailRequest(
-                getModel().getCocktail().getValue().getThumbnailUrl(),
-                this,
-                imageView));
-    }
-    private void setRandomCocktail() {
-        getRequestQueue().add(new OneRandomRequest(getModel().getCocktail()));
     }
 
     private void setRefreshButtonBehaviour() {
@@ -146,6 +104,50 @@ public class SearchRandomActivity extends ShowCocktailActivity {
                 setRandomCocktail();
             }
         });
+    }
+
+    private CocktailQueryMaker getQueryMaker() {
+        if (queryMaker == null) {
+            queryMaker = new CocktailQueryMaker(this);
+        }
+        return queryMaker;
+    }
+
+    private ApiRequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = new ApiRequestQueue(this);
+        }
+        return requestQueue;
+    }
+
+    private void checkIsFavourite(Cocktail cocktail) {
+        getQueryMaker().exists(cocktail.getId(), model.isFavourite());
+    }
+
+    private void setFavourite(boolean isFavourite) {
+        final FloatingActionButton button = findViewById(R.id.button_favourites);
+        if (isFavourite) {
+            getQueryMaker().insertAll(model.getCocktail().getValue());
+            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
+        } else {
+            getQueryMaker().delete(model.getCocktail().getValue());
+            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
+        }
+    }
+
+    private void setButtonColor(FloatingActionButton button) {
+        button.setColorFilter(
+                ContextCompat.getColor(
+                        SearchRandomActivity.this,
+                        R.color.colorPrimary),
+                PorterDuff.Mode.MULTIPLY);
+    }
+
+    private void setThumbnail() {
+        ImageView imageView = findViewById(R.id.cocktail_thumbnail);
+        getRequestQueue().add(new ThumbnailRequest(
+                Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
+                imageView));
     }
 
 }

@@ -1,18 +1,29 @@
 package com.gimmecocktail.http;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 
+/**
+ * Provides a request initialized to send an image request to a given url.
+ * The initialized request is ready to be added to the RequestQueue.
+ * When added, it will send get-image request and inject the retrieved image
+ * into the given ImageView.
+ */
 public class ThumbnailRequest extends ImageRequest {
 
     private static final int MAX_WIDTH = 300;
     private static final int MAX_HEIGHT = 300;
 
-    public ThumbnailRequest(String url, Context context, final ImageView imageView) {
+    /**
+     * Instantiates a new ThumbnailRequest.
+     *
+     * @param url       the url of the image to be retrieved
+     * @param imageView the image view where to retrieved image is to be injected
+     */
+    public ThumbnailRequest(String url, final ImageView imageView) {
         super(
                 url,
                 new Response.Listener<Bitmap>() {

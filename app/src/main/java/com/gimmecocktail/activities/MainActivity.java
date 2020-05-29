@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import com.gimmecocktail.R;
 
+/**
+ * The Main activity.
+ */
 public final class MainActivity extends AppCompatActivity {
 
     @Override

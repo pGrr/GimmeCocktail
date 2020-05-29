@@ -1,23 +1,36 @@
 package com.gimmecocktail.http;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.gimmecocktail.model.Cocktail;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 
+/**
+ * Provides a request initialized to send a search-cocktail-by-ingredient request
+ * to the Cocktail-DB API https://www.thecocktaildb.com/.
+ * The initialized request is ready to be added to the RequestQueue.
+ * When added, it will send the API-request and update
+ * the given cocktail-list mutable live data with the results.
+ */
 public class ByIngredientRequest extends JsonObjectRequest {
-    public ByIngredientRequest(final String ingredient, final MutableLiveData<List<Cocktail>> mutableLiveData, final CocktailRequestQueue cocktailRequestQueue) {
+
+    /**
+     * Instantiates a new ByIngredientRequest.
+     *
+     * @param ingredient           the ingredient to be queried
+     * @param mutableLiveData the cocktail-list mutable live data to be updated with the result
+     * @param apiRequestQueue the ApiRequestQueue, necessary to send a second api-request to
+     *                        retrieve a cocktail details once its id is known
+     */
+    public ByIngredientRequest(final String ingredient,
+                               final MutableLiveData<List<Cocktail>> mutableLiveData,
+                               final ApiRequestQueue apiRequestQueue) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + ingredient,
@@ -30,7 +43,7 @@ public class ByIngredientRequest extends JsonObjectRequest {
                             for (int i=0; i<drinks.length(); i++) {
                                 JSONObject jsonCocktail = drinks.getJSONObject(i);
                                 String id = jsonCocktail.getString("idDrink");
-                                cocktailRequestQueue.add(new ByIdRequest(id, mutableLiveData));
+                                apiRequestQueue.add(new ByIdRequest(id, mutableLiveData));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -40,7 +53,6 @@ public class ByIngredientRequest extends JsonObjectRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("ApiTest", "Response: " + error.getMessage());
                         error.printStackTrace();
                     }
                 });

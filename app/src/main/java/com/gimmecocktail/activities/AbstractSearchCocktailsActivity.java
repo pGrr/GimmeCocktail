@@ -11,30 +11,44 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.gimmecocktail.http.CocktailRequestQueue;
+import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
-import com.gimmecocktail.adapters.CocktailsAdapter;
+import com.gimmecocktail.adapters.CocktailCardsAdapter;
 import com.gimmecocktail.databinding.ActivitySearchCocktailsBinding;
-import com.gimmecocktail.model.CocktailQueryMaker;
-import com.gimmecocktail.viewmodels.SearchViewModel;
+import com.gimmecocktail.viewmodels.CocktailListViewModel;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Abstract class providing base implementation for all activities that query the API
+ * for cocktails and show the results as cards.
+ * @see SearchByNameActivity
+ * @see SearchByIngredientActivity
+ */
 public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity {
 
-    private SearchViewModel model;
+    private CocktailListViewModel model;
     private ActivitySearchCocktailsBinding binding;
-    private CocktailRequestQueue requestQueue;
-    private CocktailQueryMaker queryMaker;
+    private ApiRequestQueue requestQueue;
 
-    SearchViewModel getModel() {
+    /**
+     * Gets the cocktail-list view model.
+     *
+     * @return the cocktail-list view model
+     */
+    CocktailListViewModel getModel() {
         return model;
     }
 
-    CocktailRequestQueue getRequestQueue() {
+    /**
+     * Gets the api request queue to be used to add API requests.
+     *
+     * @return the activity request queue
+     */
+    ApiRequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            requestQueue = new CocktailRequestQueue<>(getApplication().getApplicationContext(), model.getCocktails());
+            requestQueue = new ApiRequestQueue(getApplication().getApplicationContext());
         }
         return requestQueue;
     }
@@ -49,15 +63,34 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         setOnQueryTextListener();
     }
 
-    public CocktailQueryMaker getQueryMaker() {
-        if (this.queryMaker == null) {
-            this.queryMaker = new CocktailQueryMaker(this);
-        }
-        return this.queryMaker;
+    /**
+     * Sets the title of the activity in the view.
+     *
+     * @param title the title
+     */
+    void setTitle(String title) {
+        TextView textView = findViewById(R.id.search_cocktails_title);
+        textView.setText(title);
+    }
+
+    /**
+     * Abstract search cocktails method to be implemented by sub-classes.
+     *
+     * @param query the query parameter
+     */
+    protected abstract void searchCocktails(String query);
+
+    private void setModel() {
+        this.model = new ViewModelProvider(this).get(CocktailListViewModel.class);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_cocktails);
+        this.binding.setLifecycleOwner(this);
+    }
+
+    private void setRequestQueue() {
+        this.requestQueue = new ApiRequestQueue(this);
     }
 
     private void setUpRecyclerView() {
-        // xml id = cocktails_recycler_view
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         getRecyclerView().setLayoutManager(layoutManager);
     }
@@ -66,46 +99,14 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         return AbstractSearchCocktailsActivity.this.binding.cocktailsRecyclerView;
     }
 
-    private void setModel() {
-        this.model = new ViewModelProvider(this).get(SearchViewModel.class);
-        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_cocktails);
-        this.binding.setLifecycleOwner(this);
-    }
-
-    private void setRequestQueue() {
-        this.requestQueue = new CocktailRequestQueue<>(this, model.getCocktails());
-    }
-
     private void setModelObserver() {
         this.model.getCocktails().observe(this, new Observer<List<Cocktail>>() {
             @Override
             public void onChanged(List<Cocktail> cocktails) {
-                CocktailsAdapter adapter = createCocktailsAdapter(cocktails);
+                CocktailCardsAdapter adapter = createCocktailsAdapter(cocktails);
                 AbstractSearchCocktailsActivity.this.getRecyclerView().setAdapter(adapter);
             }
         });
-    }
-
-    private CocktailsAdapter createCocktailsAdapter(List<Cocktail> cocktails) {
-        CocktailsAdapter adapter = new CocktailsAdapter(cocktails);
-        setOnItemClickListener(adapter);
-        return adapter;
-    }
-
-    private void setOnItemClickListener(CocktailsAdapter adapter) {
-        adapter.setOnItemClickListener(new CocktailsAdapter.CocktailsViewHolder.ClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Cocktail cocktail = Objects.requireNonNull(model.getCocktails().getValue()).get(position);
-                startShowCocktailActivity(cocktail);
-            }
-        });
-    }
-
-    private void startShowCocktailActivity(Cocktail cocktail) {
-        Intent intent = new Intent(AbstractSearchCocktailsActivity.this, ShowCocktailActivity.class)
-                .putExtra("cocktail", cocktail);
-        startActivity(intent);
     }
 
     private void setOnQueryTextListener() {
@@ -129,11 +130,26 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         });
     }
 
-    void setTitle(String title) {
-        TextView textView = findViewById(R.id.search_cocktails_title);
-        textView.setText(title);
+    private void setOnItemClickListener(CocktailCardsAdapter adapter) {
+        adapter.setOnItemClickListener(new CocktailCardsAdapter.CocktailsViewHolder.ClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Cocktail cocktail = Objects.requireNonNull(model.getCocktails().getValue()).get(position);
+                startShowCocktailActivity(cocktail);
+            }
+        });
     }
 
-    protected abstract void searchCocktails(String query);
+    private CocktailCardsAdapter createCocktailsAdapter(List<Cocktail> cocktails) {
+        CocktailCardsAdapter adapter = new CocktailCardsAdapter(cocktails);
+        setOnItemClickListener(adapter);
+        return adapter;
+    }
+
+    private void startShowCocktailActivity(Cocktail cocktail) {
+        Intent intent = new Intent(AbstractSearchCocktailsActivity.this, ShowCocktailActivity.class)
+                .putExtra("cocktail", cocktail);
+        startActivity(intent);
+    }
 
 }

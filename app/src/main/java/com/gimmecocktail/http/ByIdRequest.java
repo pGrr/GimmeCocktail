@@ -8,11 +8,25 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Provides a request initialized to send a search-cocktail-by-id request
+ * to the Cocktail-DB API https://www.thecocktaildb.com/.
+ * The initialized request is ready to be added to the RequestQueue.
+ * When added, it will send the API-request and update
+ * the given cocktail-list mutable live data with the results.
+ */
 class ByIdRequest extends JsonObjectRequest {
-    public ByIdRequest(final String id, final MutableLiveData<List<Cocktail>> mutableLiveData) {
+
+    /**
+     * Instantiates a new ByIdRequest.
+     *
+     * @param id              the id of the cocktail to be retrieved
+     * @param mutableLiveData the cocktail-list mutable live data to be updated with the result
+     */
+    ByIdRequest(final String id, final MutableLiveData<List<Cocktail>> mutableLiveData) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id,
@@ -22,7 +36,7 @@ class ByIdRequest extends JsonObjectRequest {
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
                             List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(cocktailResponse);
-                            mutableLiveData.getValue().addAll(cocktails);
+                            Objects.requireNonNull(mutableLiveData.getValue()).addAll(cocktails);
                             mutableLiveData.setValue(mutableLiveData.getValue());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -36,4 +50,5 @@ class ByIdRequest extends JsonObjectRequest {
                     }
                 });
     }
+
 }

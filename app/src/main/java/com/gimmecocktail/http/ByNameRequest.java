@@ -1,32 +1,41 @@
 package com.gimmecocktail.http;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.gimmecocktail.model.Cocktail;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 
+/**
+ * Provides a request initialized to send a search-cocktail-by-name request
+ * to the Cocktail-DB API https://www.thecocktaildb.com/.
+ * The initialized request is ready to be added to the RequestQueue.
+ * When added, it will send the API-request and update
+ * the given cocktail-list mutable live data with the results.
+ */
 public class ByNameRequest extends JsonObjectRequest {
 
-    public ByNameRequest(final String name, final MutableLiveData<List<Cocktail>> mutableLiveData) {
+    /**
+     * Instantiates a new ByNameRequest.
+     *
+     * @param name            the name of the cocktail to be queried
+     * @param mutableLiveData the mutable live data to be updated with the results
+     */
+    public ByNameRequest(final String name,
+                         final MutableLiveData<List<Cocktail>> mutableLiveData) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + name,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject cocktailResponse) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(cocktailResponse);
+                            List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(response);
                             mutableLiveData.setValue(cocktails);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -36,7 +45,6 @@ public class ByNameRequest extends JsonObjectRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("ApiTest", "Response: " + error.getMessage());
                         error.printStackTrace();
                     }
                 });

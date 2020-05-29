@@ -1,21 +1,24 @@
 package com.gimmecocktail.viewmodels;
 
-import android.app.Application;
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import com.gimmecocktail.model.Cocktail;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class SearchViewModel extends AndroidViewModel {
+
+/**
+ * A view model that manages a list of Cocktails.
+ */
+public final class CocktailListViewModel extends ViewModel {
 
     private MutableLiveData<List<Cocktail>> cocktails;
 
-    public SearchViewModel(@NonNull Application application) {
-        super(application);
-    }
-
+    /**
+     * Gets the cocktail list mutable live data.
+     *
+     * @return the cocktails
+     */
     public MutableLiveData<List<Cocktail>> getCocktails() {
         if (cocktails == null) {
             cocktails = new MutableLiveData<>();
@@ -23,5 +26,5 @@ public final class SearchViewModel extends AndroidViewModel {
         }
         return cocktails;
     }
-
+    
 }

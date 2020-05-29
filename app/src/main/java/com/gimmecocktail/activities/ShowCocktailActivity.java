@@ -5,29 +5,28 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.gimmecocktail.http.CocktailRequestQueue;
+import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivityShowCocktailBinding;
 import com.gimmecocktail.http.ThumbnailRequest;
 import com.gimmecocktail.model.CocktailQueryMaker;
-import com.gimmecocktail.viewmodels.ShowCocktailViewModel;
+import com.gimmecocktail.viewmodels.CocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.Objects;
 
-
+/**
+ * Activity that shows a Cocktail, provided by explicit intent extras.
+ */
 public class ShowCocktailActivity extends AppCompatActivity {
 
     private ActivityShowCocktailBinding binding;
-    private ShowCocktailViewModel model;
-    private CocktailRequestQueue requestQueue;
+    private CocktailViewModel model;
+    private ApiRequestQueue requestQueue;
     private CocktailQueryMaker queryMaker;
 
     @Override
@@ -38,26 +37,22 @@ public class ShowCocktailActivity extends AppCompatActivity {
         setFavouriteButtonBehaviour();
     }
 
-    ShowCocktailViewModel getModel() {
-        return model;
-    }
-
-    CocktailQueryMaker getQueryMaker() {
+    private CocktailQueryMaker getQueryMaker() {
         if (queryMaker == null) {
             queryMaker = new CocktailQueryMaker(this);
         }
         return queryMaker;
     }
 
-    CocktailRequestQueue getRequestQueue() {
+    private ApiRequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            requestQueue = new CocktailRequestQueue<>(this, model.getCocktail());
+            requestQueue = new ApiRequestQueue(this);
         }
         return requestQueue;
     }
 
-    void setModel() {
-        this.model = new ViewModelProvider(this).get(ShowCocktailViewModel.class);
+    private void setModel() {
+        this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_show_cocktail);
         this.binding.setLifecycleOwner(this);
         if (getIntent().hasExtra("cocktail")) {
@@ -67,7 +62,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         }
     }
 
-    void setModelObserver() {
+    private void setModelObserver() {
         model.getCocktail().observe(this, new Observer<Cocktail>() {
             @Override
             public void onChanged(Cocktail cocktail) {
@@ -85,23 +80,24 @@ public class ShowCocktailActivity extends AppCompatActivity {
         });
     }
 
-    void setFavouriteButtonBehaviour() {
+    private void setFavouriteButtonBehaviour() {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
-        setButtonColor(button, R.color.colorPrimary);
+        setButtonColor(button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFavourite(!model.isFavourite().getValue());
-                checkIsFavourite(getModel().getCocktail().getValue());
+                boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
+                setFavourite(!isFavourite);
+                checkIsFavourite(Objects.requireNonNull(model.getCocktail().getValue()));
             }
         });
     }
 
-    void checkIsFavourite(Cocktail cocktail) {
+    private void checkIsFavourite(Cocktail cocktail) {
         getQueryMaker().exists(cocktail.getId(), model.isFavourite());
     }
 
-    void setFavourite(boolean isFavourite) {
+    private void setFavourite(boolean isFavourite) {
         final FloatingActionButton button = findViewById(R.id.button_favourites);
         if (isFavourite) {
             getQueryMaker().insertAll(model.getCocktail().getValue());
@@ -112,19 +108,18 @@ public class ShowCocktailActivity extends AppCompatActivity {
         }
     }
 
-    void setButtonColor(FloatingActionButton button, int colorId) {
+    private void setButtonColor(FloatingActionButton button) {
         button.setColorFilter(
                 ContextCompat.getColor(
                         ShowCocktailActivity.this,
-                        colorId),
+                        R.color.colorPrimary),
                 PorterDuff.Mode.MULTIPLY);
     }
 
-    void setThumbnail() {
+    private void setThumbnail() {
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
         getRequestQueue().add(new ThumbnailRequest(
-                model.getCocktail().getValue().getThumbnailUrl(),
-                this,
+                Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
                 imageView));
     }
 
