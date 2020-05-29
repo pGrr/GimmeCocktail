@@ -9,7 +9,6 @@
     tools:context=".activities.MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

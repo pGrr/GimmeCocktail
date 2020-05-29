@@ -12,17 +12,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@drawable/ic_launcher</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <style name="App.FloatingActionButton" parent="AppTheme">
-        <item name="colorSecondary">@color/colorSecondaryVariant</item>
-        <item name="colorOnSecondary">@color/material_on_background_disabled</item>
-    </style>
-
 </resources>
