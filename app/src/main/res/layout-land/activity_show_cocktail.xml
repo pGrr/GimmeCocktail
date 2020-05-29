@@ -64,7 +64,8 @@
             android:id="@+id/scrollView2"
             android:layout_width="@dimen/max_card_width"
             android:layout_height="0dp"
-            android:padding="30dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -90,9 +91,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
+                        android:contentDescription="@string/cocktail_thumbnail_picture"
                         android:elevation="10dp"
-                        app:srcCompat="@android:drawable/screen_background_light_transparent"
-                        android:contentDescription="@string/cocktail_thumbnail_picture" />
+                        app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
                     <TextView
                         android:id="@+id/textView2"
