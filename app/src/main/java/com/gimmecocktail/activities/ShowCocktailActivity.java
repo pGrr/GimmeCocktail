@@ -63,10 +63,8 @@ public class ShowCocktailActivity extends AppCompatActivity {
         if (getIntent().hasExtra("cocktail")) {
             Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
-            checkIsFavourite(cocktail);
             setThumbnail();
         }
-        binding.setCocktail(model.getCocktail().getValue());
     }
 
     protected void setModelObserver() {
