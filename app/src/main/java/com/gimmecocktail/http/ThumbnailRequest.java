@@ -2,9 +2,14 @@ package com.gimmecocktail.http;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
 
 /**
  * Provides a request initialized to send an image request to a given url.
@@ -22,8 +27,12 @@ public class ThumbnailRequest extends ImageRequest {
      *
      * @param url       the url of the image to be retrieved
      * @param imageView the image view where to retrieved image is to be injected
+     * @param activity        the activity that instantiated the request (used for alerting errors)
      */
-    public ThumbnailRequest(String url, final ImageView imageView) {
+    public ThumbnailRequest(
+            String url,
+            final ImageView imageView,
+            final AppCompatActivity activity) {
         super(
                 url,
                 new Response.Listener<Bitmap>() {
@@ -39,8 +48,10 @@ public class ThumbnailRequest extends ImageRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
+                        Activities.alert(
+                                activity.getString(R.string.connection_failed_title),
+                                activity.getString(R.string.connection_failed_message),
+                                activity);                    }
                 });
     }
 }

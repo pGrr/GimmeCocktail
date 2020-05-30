@@ -1,10 +1,14 @@
 package com.gimmecocktail.http;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +29,11 @@ class ByIdRequest extends JsonObjectRequest {
      *
      * @param id              the id of the cocktail to be retrieved
      * @param mutableLiveData the cocktail-list mutable live data to be updated with the result
+     * @param activity        the activity that instantiated the request (used for alerting errors)
      */
-    ByIdRequest(final String id, final MutableLiveData<List<Cocktail>> mutableLiveData) {
+    ByIdRequest(final String id,
+                final MutableLiveData<List<Cocktail>> mutableLiveData,
+                final AppCompatActivity activity) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id,
@@ -45,8 +52,11 @@ class ByIdRequest extends JsonObjectRequest {
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Activities.alert(
+                                activity.getString(R.string.connection_failed_title), 
+                                activity.getString(R.string.connection_failed_message),
+                                activity);
                     }
                 });
     }

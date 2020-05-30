@@ -25,7 +25,7 @@ public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
      */
     @Override
     protected void searchCocktails(String name) {
-        getRequestQueue().add(new ByNameRequest(name, getModel().getCocktails()));
+        getRequestQueue().add(new ByNameRequest(name, getModel().getCocktails(), this));
     }
 
 }

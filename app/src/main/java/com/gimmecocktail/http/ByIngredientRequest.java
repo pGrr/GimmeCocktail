@@ -1,10 +1,13 @@
 package com.gimmecocktail.http;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,10 +30,12 @@ public class ByIngredientRequest extends JsonObjectRequest {
      * @param mutableLiveData the cocktail-list mutable live data to be updated with the result
      * @param apiRequestQueue the ApiRequestQueue, necessary to send a second api-request to
      *                        retrieve a cocktail details once its id is known
+     * @param activity        the activity that instantiated the request (used for alerting errors)
      */
     public ByIngredientRequest(final String ingredient,
                                final MutableLiveData<List<Cocktail>> mutableLiveData,
-                               final ApiRequestQueue apiRequestQueue) {
+                               final ApiRequestQueue apiRequestQueue,
+                               final AppCompatActivity activity) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=" + ingredient,
@@ -43,7 +48,7 @@ public class ByIngredientRequest extends JsonObjectRequest {
                             for (int i=0; i<drinks.length(); i++) {
                                 JSONObject jsonCocktail = drinks.getJSONObject(i);
                                 String id = jsonCocktail.getString("idDrink");
-                                apiRequestQueue.add(new ByIdRequest(id, mutableLiveData));
+                                apiRequestQueue.add(new ByIdRequest(id, mutableLiveData, activity));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -53,7 +58,10 @@ public class ByIngredientRequest extends JsonObjectRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                        Activities.alert(
+                                activity.getString(R.string.connection_failed_title),
+                                activity.getString(R.string.connection_failed_message),
+                                activity);
                     }
                 });
     }

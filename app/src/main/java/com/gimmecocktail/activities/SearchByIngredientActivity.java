@@ -31,7 +31,7 @@ public class SearchByIngredientActivity extends AbstractSearchCocktailsActivity 
         getRequestQueue().add(new ByIngredientRequest(
                 ingredient,
                 getModel().getCocktails(),
-                getRequestQueue()));
+                getRequestQueue(), this));
     }
 
 }

@@ -77,7 +77,7 @@ public class SearchRandomActivity extends AppCompatActivity {
     }
 
     private void setRandomCocktail() {
-        getRequestQueue().add(new OneRandomRequest(model.getCocktail()));
+        getRequestQueue().add(new OneRandomRequest(model.getCocktail(), this));
     }
 
     private void setFavouriteButtonBehaviour() {
@@ -149,7 +149,7 @@ public class SearchRandomActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
         getRequestQueue().add(new ThumbnailRequest(
                 Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
-                imageView));
+                imageView, this));
     }
 
 }

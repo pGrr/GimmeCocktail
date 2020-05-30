@@ -1,10 +1,13 @@
 package com.gimmecocktail.http;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +27,11 @@ public class ByNameRequest extends JsonObjectRequest {
      *
      * @param name            the name of the cocktail to be queried
      * @param mutableLiveData the mutable live data to be updated with the results
+     * @param activity        the activity that instantiated the request (used for alerting errors)
      */
     public ByNameRequest(final String name,
-                         final MutableLiveData<List<Cocktail>> mutableLiveData) {
+                         final MutableLiveData<List<Cocktail>> mutableLiveData,
+                         final AppCompatActivity activity) {
         super(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + name,
@@ -45,8 +50,10 @@ public class ByNameRequest extends JsonObjectRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
+                        Activities.alert(
+                                activity.getString(R.string.connection_failed_title),
+                                activity.getString(R.string.connection_failed_message),
+                                activity);                    }
                 });
     }
 }

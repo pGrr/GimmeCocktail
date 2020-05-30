@@ -1,9 +1,12 @@
 package com.gimmecocktail.http;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,8 +24,10 @@ public class OneRandomRequest extends JsonObjectRequest {
      * Instantiates a new OneRandomRequest.
      *
      * @param mutableLiveData the mutable live data to be updated with the result
+     * @param activity        the activity that instantiated the request (used for alerting errors)
      */
-    public OneRandomRequest(final MutableLiveData<Cocktail> mutableLiveData) {
+    public OneRandomRequest(final MutableLiveData<Cocktail> mutableLiveData,
+                            final AppCompatActivity activity) {
         super(
                 Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/random.php",
@@ -43,8 +48,10 @@ public class OneRandomRequest extends JsonObjectRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
+                        Activities.alert(
+                                activity.getString(R.string.connection_failed_title),
+                                activity.getString(R.string.connection_failed_message),
+                                activity);                    }
                 });
     }
 

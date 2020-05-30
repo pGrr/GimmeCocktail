@@ -122,7 +122,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.cocktail_thumbnail);
         getRequestQueue().add(new ThumbnailRequest(
                 Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
-                imageView));
+                imageView, this));
     }
 
 }

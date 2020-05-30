@@ -12,4 +12,6 @@
     <string name="cocktail_thumbnail_picture">Cocktail thumbnail picture</string>
     <string name="ingredients_section_title">Ingredients</string>
     <string name="instructions_section_title">Instructions</string>
+    <string name="connection_failed_title">Connection failed</string>
+    <string name="connection_failed_message">Cannot connect to the internet... Please check your connection!</string>
 </resources>
