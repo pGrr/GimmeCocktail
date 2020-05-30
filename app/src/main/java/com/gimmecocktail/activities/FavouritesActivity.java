@@ -32,8 +32,10 @@ public class FavouritesActivity extends AppCompatActivity {
         setModel();
         setUpRecyclerView();
         setModelObserver();
-        searchCocktails();
-        binding.executePendingBindings();
+        if (savedInstanceState == null) {
+            searchCocktails();
+            binding.executePendingBindings();
+        }
     }
 
     @Override

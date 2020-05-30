@@ -35,6 +35,13 @@ public class ShowCocktailActivity extends AppCompatActivity {
         setModel();
         setModelObserver();
         setFavouriteButtonBehaviour();
+        if (savedInstanceState == null) {
+            if (getIntent().hasExtra("cocktail")) {
+                Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
+                model.getCocktail().setValue(cocktail);
+                setThumbnail();
+            }
+        }
     }
 
     private CocktailQueryMaker getQueryMaker() {
@@ -55,11 +62,6 @@ public class ShowCocktailActivity extends AppCompatActivity {
         this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_show_cocktail);
         this.binding.setLifecycleOwner(this);
-        if (getIntent().hasExtra("cocktail")) {
-            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
-            model.getCocktail().setValue(cocktail);
-            setThumbnail();
-        }
     }
 
     private void setModelObserver() {

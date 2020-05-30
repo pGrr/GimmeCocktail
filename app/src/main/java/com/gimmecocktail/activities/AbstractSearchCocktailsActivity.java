@@ -117,14 +117,14 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
                 try {
                     searchCocktails(query);
                 } catch (Exception e) {
-                    Log.d(SearchByNameActivity.class.getName(), Objects.requireNonNull(e.getMessage()));
+                    e.printStackTrace();
                 }
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchCocktails(newText);
+                // searchCocktails(newText);
                 return true;
             }
         });

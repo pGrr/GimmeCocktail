@@ -36,9 +36,11 @@ public class SearchRandomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setModel();
         setModelObserver();
-        setRandomCocktail();
         setFavouriteButtonBehaviour();
         setRefreshButtonBehaviour();
+        if (savedInstanceState == null) {
+            setRandomCocktail();
+        }
     }
 
     private void setModel() {
