@@ -1,5 +1,6 @@
 package com.gimmecocktail.model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
@@ -40,6 +41,9 @@ public final class Cocktail implements Parcelable {
     private final String thumbnailUrl; // strDrinkThumb
     private final String ingredients; // { strIngredient1 => strMeasure1, ...}
     private final String instructions; // strInstructions
+
+    @Ignore
+    private Bitmap thumbnailBitmap = null;
 
     /**
      * Instantiates a new Cocktail.
@@ -156,6 +160,24 @@ public final class Cocktail implements Parcelable {
      */
     public String getGenericInfo() {
         return genericInfo;
+    }
+
+    /**
+     * Gets the thumbnail bitmap
+     *
+     * @return the thumbnail bitmap
+     */
+    public Bitmap getThumbnailBitmap() {
+        return thumbnailBitmap;
+    }
+
+    /**
+     * Sets the thumbnail bitmap
+     *
+     * @param bitmap
+     */
+    public void setThumbnailBitmap(Bitmap bitmap) {
+        thumbnailBitmap = bitmap;
     }
 
     @NonNull

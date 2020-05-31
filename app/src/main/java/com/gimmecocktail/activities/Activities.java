@@ -18,7 +18,10 @@ public class Activities {
      * @param message  the message
      * @param activity the activity
      */
-    public static void alert(String title, String message, final AppCompatActivity activity) {
+    public static void alert(String title,
+                             String message,
+                             final AppCompatActivity activity,
+                             final boolean shouldActivityBeClosed) {
         new AlertDialog.Builder(activity)
                 .setTitle(title)
                 .setMessage(message)
@@ -27,7 +30,9 @@ public class Activities {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                activity.finish();
+                                if (shouldActivityBeClosed) {
+                                    activity.finish();
+                                }
                             }
                         }).show();
     }

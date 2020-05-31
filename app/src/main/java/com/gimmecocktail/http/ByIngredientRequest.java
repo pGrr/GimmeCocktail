@@ -2,6 +2,8 @@ package com.gimmecocktail.http;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+
+import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -58,10 +60,13 @@ public class ByIngredientRequest extends JsonObjectRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Activities.alert(
-                                activity.getString(R.string.connection_failed_title),
-                                activity.getString(R.string.connection_failed_message),
-                                activity);
+                        if (error instanceof NetworkError) {
+                            Activities.alert(
+                                    activity.getString(R.string.connection_failed_title),
+                                    activity.getString(R.string.connection_failed_message),
+                                    activity,
+                                    true);
+                        }
                     }
                 });
     }

@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.OneRandomRequest;
 import com.gimmecocktail.model.Cocktail;
@@ -16,8 +17,10 @@ import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivitySearchRandomBinding;
 import com.gimmecocktail.http.ThumbnailRequest;
 import com.gimmecocktail.model.CocktailQueryMaker;
+import com.gimmecocktail.utils.FavouriteCocktailImages;
 import com.gimmecocktail.viewmodels.CocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Objects;
 
 /**
@@ -71,7 +74,24 @@ public class SearchRandomActivity extends AppCompatActivity {
         model.isFavourite().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isFavourite) {
-                setFavourite(isFavourite);
+                final FloatingActionButton button = findViewById(R.id.button_favourites);
+                if (isFavourite) {
+                    getQueryMaker().insertAll(model.getCocktail().getValue());
+                } else {
+                    getQueryMaker().delete(model.getCocktail().getValue());
+                }
+                if (model.getCocktail().getValue().getThumbnailBitmap() != null && isFavourite) {
+                    FavouriteCocktailImages.save(
+                            Objects.requireNonNull(model.getCocktail().getValue()).getId(),
+                            model.getCocktail().getValue().getThumbnailBitmap(),
+                            SearchRandomActivity.this);
+                    button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
+                } else if (!isFavourite) {
+                    FavouriteCocktailImages.delete(
+                            Objects.requireNonNull(model.getCocktail().getValue()).getId(),
+                            SearchRandomActivity.this);
+                    button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
+                }
             }
         });
     }
@@ -87,7 +107,7 @@ public class SearchRandomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
-                setFavourite(!isFavourite);
+                SearchRandomActivity.this.model.isFavourite().setValue(!isFavourite);
                 checkIsFavourite(Objects.requireNonNull(model.getCocktail().getValue()));
             }
         });
@@ -126,17 +146,6 @@ public class SearchRandomActivity extends AppCompatActivity {
         getQueryMaker().exists(cocktail.getId(), model.isFavourite());
     }
 
-    private void setFavourite(boolean isFavourite) {
-        final FloatingActionButton button = findViewById(R.id.button_favourites);
-        if (isFavourite) {
-            getQueryMaker().insertAll(model.getCocktail().getValue());
-            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
-        } else {
-            getQueryMaker().delete(model.getCocktail().getValue());
-            button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
-        }
-    }
-
     private void setButtonColor(FloatingActionButton button) {
         button.setColorFilter(
                 ContextCompat.getColor(
@@ -146,10 +155,23 @@ public class SearchRandomActivity extends AppCompatActivity {
     }
 
     private void setThumbnail() {
-        ImageView imageView = findViewById(R.id.cocktail_thumbnail);
-        getRequestQueue().add(new ThumbnailRequest(
-                Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
-                imageView, this));
+        if (FavouriteCocktailImages.exists(
+                model.getCocktail().getValue().getId(), SearchRandomActivity.this)) {
+            FavouriteCocktailImages.load(
+                    model.getCocktail().getValue().getId(),
+                    SearchRandomActivity.this,
+                    R.id.cocktail_thumbnail);
+        } else {
+            if (model.getCocktail().getValue().getThumbnailBitmap() == null) {
+                getRequestQueue().add(new ThumbnailRequest(
+                        Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
+                        model.getCocktail(),
+                        this));
+            } else {
+                ImageView image = findViewById(R.id.cocktail_thumbnail);
+                image.setImageBitmap(model.getCocktail().getValue().getThumbnailBitmap());
+            }
+        }
     }
 
 }

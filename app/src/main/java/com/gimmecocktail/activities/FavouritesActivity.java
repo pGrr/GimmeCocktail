@@ -38,12 +38,6 @@ public class FavouritesActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        searchCocktails();
-    }
-
     private void setModel() {
         this.model = new ViewModelProvider(this).get(CocktailListViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_favourites);

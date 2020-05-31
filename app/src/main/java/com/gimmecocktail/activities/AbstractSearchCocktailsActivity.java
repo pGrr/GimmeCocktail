@@ -2,7 +2,6 @@ package com.gimmecocktail.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -124,7 +123,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // searchCocktails(newText);
+                searchCocktails(newText);
                 return true;
             }
         });

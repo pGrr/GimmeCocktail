@@ -12,6 +12,9 @@ import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,7 +59,8 @@ class ByIdRequest extends JsonObjectRequest {
                         Activities.alert(
                                 activity.getString(R.string.connection_failed_title), 
                                 activity.getString(R.string.connection_failed_message),
-                                activity);
+                                activity,
+                                true);
                     }
                 });
     }

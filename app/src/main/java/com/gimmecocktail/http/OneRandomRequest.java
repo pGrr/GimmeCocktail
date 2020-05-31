@@ -51,7 +51,8 @@ public class OneRandomRequest extends JsonObjectRequest {
                         Activities.alert(
                                 activity.getString(R.string.connection_failed_title),
                                 activity.getString(R.string.connection_failed_message),
-                                activity);                    }
+                                activity,
+                                true);                    }
                 });
     }
 
