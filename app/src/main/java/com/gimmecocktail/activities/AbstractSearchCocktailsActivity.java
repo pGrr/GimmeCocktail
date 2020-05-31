@@ -30,6 +30,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
     private CocktailListViewModel model;
     private ActivitySearchCocktailsBinding binding;
     private ApiRequestQueue requestQueue;
+    private boolean queryTextConfigChangeFlag;
 
     /**
      * Gets the cocktail-list view model.
@@ -59,6 +60,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         setRequestQueue();
         setUpRecyclerView();
         setModelObserver();
+        queryTextConfigChangeFlag = savedInstanceState != null;
         setOnQueryTextListener();
     }
 
@@ -123,7 +125,13 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchCocktails(newText);
+                // prevent the cocktails search for the first query text change
+                // if it's caused by a configuration change
+                if (queryTextConfigChangeFlag) {
+                    queryTextConfigChangeFlag = false;
+                } else {
+                    searchCocktails(newText);
+                }
                 return true;
             }
         });
