@@ -88,7 +88,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
     }
 
     private void setRequestQueue() {
-        this.requestQueue = new ApiRequestQueue(this);
+        this.requestQueue = new ApiRequestQueue();
     }
 
     private void setUpRecyclerView() {

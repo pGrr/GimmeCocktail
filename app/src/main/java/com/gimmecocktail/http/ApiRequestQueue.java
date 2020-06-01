@@ -19,7 +19,7 @@ public class ApiRequestQueue extends RequestQueue {
      *
      * @param context the context from which the request is to be initialized
      */
-    public ApiRequestQueue(Context context) {
+    public ApiRequestQueue() {
         super(new NoCache(), new BasicNetwork(new HurlStack()));
         this.start();
         // new DiskBasedCache(context.getCacheDir(), MAX_CACHE_SIZE_IN_BYTES)

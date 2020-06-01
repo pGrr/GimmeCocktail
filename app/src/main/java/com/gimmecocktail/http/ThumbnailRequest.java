@@ -9,9 +9,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.gimmecocktail.Observable;
+import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
 import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides a request initialized to send an image request to a given url.
@@ -19,10 +24,17 @@ import com.gimmecocktail.model.Cocktail;
  * When added, it will send get-image request and set the retrieved image
  * as the Cocktail thumbnail Bitmap.
  */
-public class ThumbnailRequest extends ImageRequest {
+public class ThumbnailRequest implements Observable<Bitmap> {
 
     private static final int MAX_WIDTH = 300;
     private static final int MAX_HEIGHT = 300;
+    private List<Observer<Bitmap>> observers = new ArrayList<>();
+    private Bitmap bitmap;
+    private ImageRequest request;
+
+    public ThumbnailRequest(String url) {
+        this(url, null, null);
+    }
 
     /**
      * Instantiates a new ThumbnailRequest.
@@ -35,14 +47,18 @@ public class ThumbnailRequest extends ImageRequest {
             String url,
             final MutableLiveData<Cocktail> mutableLiveData,
             final AppCompatActivity activity) {
-        super(
+            request = new ImageRequest(
                 url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap thumbnail) {
-                        Cocktail cocktail = mutableLiveData.getValue();
-                        cocktail.setThumbnailBitmap(thumbnail);
-                        mutableLiveData.setValue(cocktail);
+                        bitmap = thumbnail;
+                        notifyResultToObservers();
+                        if (mutableLiveData != null) {
+                            Cocktail cocktail = mutableLiveData.getValue();
+                            cocktail.setThumbnailBitmap(thumbnail);
+                            mutableLiveData.setValue(cocktail);
+                        }
                     }
                 },
                 MAX_WIDTH,
@@ -52,11 +68,36 @@ public class ThumbnailRequest extends ImageRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Activities.alert(
-                                activity.getString(R.string.connection_failed_title),
-                                activity.getString(R.string.connection_failed_image_message),
-                                activity,
-                                false);                    }
+                        if (activity != null) {
+                            Activities.alert(
+                                    activity.getString(R.string.connection_failed_title),
+                                    activity.getString(R.string.connection_failed_image_message),
+                                    activity,
+                                    false);
+                        }
+                    }
                 });
+    }
+
+
+    public ImageRequest getRequest() {
+        return request;
+    }
+
+    @Override
+    public void observe(Observer<Bitmap> observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void detach(Observer<Bitmap> observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyResultToObservers() {
+        for (Observer<Bitmap> observer: observers) {
+            observer.onResult(bitmap);
+        }
     }
 }

@@ -15,4 +15,10 @@
     <string name="connection_failed_title">Connection failed</string>
     <string name="connection_failed_message">Cannot connect to the internet... Please check your connection!</string>
     <string name="connection_failed_image_message">Please activate your internet connection to see the picture</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_cocktail_name_title">Name</string>
+    <string name="widget_cocktail_name_text">Cocktail name</string>
+    <string name="widget_cocktail_ingredients_text">Cocktail ingredients</string>
+    <string name="widget_cocktail_ingredients_title">Ingredients</string>
 </resources>
