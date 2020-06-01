@@ -1,11 +1,11 @@
 package com.gimmecocktail.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,7 +30,7 @@ public class FavouriteCocktailImages {
      * @return              the absolute path of the saved file
      */
     public static String save(
-            String fileName, Bitmap bitmapImage, AppCompatActivity activity){
+            String fileName, Bitmap bitmapImage, Activity activity){
         ContextWrapper cw = new ContextWrapper(activity);
         File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
         File mypath = new File(directory,fileName);
@@ -51,7 +51,7 @@ public class FavouriteCocktailImages {
      * @param imageViewId   the image view id
      */
     public static void load(
-            String fileName, AppCompatActivity activity, int imageViewId) {
+            String fileName, Activity activity, int imageViewId) {
         ContextWrapper cw = new ContextWrapper(activity);
         File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
         File f = new File(directory, fileName);
@@ -70,7 +70,7 @@ public class FavouriteCocktailImages {
      * @param fileName the file name
      * @param activity the activity
      */
-    public static void delete(String fileName, AppCompatActivity activity){
+    public static void delete(String fileName, Activity activity){
             ContextWrapper cw = new ContextWrapper(activity);
             File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
             File mypath = new File(directory,fileName);
@@ -84,7 +84,7 @@ public class FavouriteCocktailImages {
      * @param activity the activity
      * @return true if the file exists, false otherwise
      */
-    public static boolean exists(String fileName, AppCompatActivity activity) {
+    public static boolean exists(String fileName, Activity activity) {
         ContextWrapper cw = new ContextWrapper(activity);
         File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
         File mypath = new File(directory,fileName);

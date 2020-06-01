@@ -2,10 +2,12 @@ package com.gimmecocktail.viewmodels;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.gimmecocktail.model.Cocktail;
 
-public class CocktailViewModel extends ViewModel {
+/**
+ * A view model that manages a single Cocktail.
+ */
+public class CocktailViewModel2 extends ViewModel {
 
     private MutableLiveData<Cocktail> cocktail;
     private MutableLiveData<Boolean> isFavourite;

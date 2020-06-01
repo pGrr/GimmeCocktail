@@ -1,5 +1,6 @@
 package com.gimmecocktail.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +21,7 @@ public class Activities {
      */
     public static void alert(String title,
                              String message,
-                             final AppCompatActivity activity,
+                             final Activity activity,
                              final boolean shouldActivityBeClosed) {
         new AlertDialog.Builder(activity)
                 .setTitle(title)

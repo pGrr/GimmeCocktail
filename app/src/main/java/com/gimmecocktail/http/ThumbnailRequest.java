@@ -1,5 +1,6 @@
 package com.gimmecocktail.http;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
@@ -34,7 +35,7 @@ public class ThumbnailRequest extends ImageRequest {
     public ThumbnailRequest(
             String url,
             final MutableLiveData<Cocktail> mutableLiveData,
-            final AppCompatActivity activity) {
+            final Activity activity) {
         super(
                 url,
                 new Response.Listener<Bitmap>() {
