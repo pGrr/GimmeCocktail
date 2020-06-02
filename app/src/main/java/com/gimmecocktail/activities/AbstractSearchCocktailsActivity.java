@@ -55,6 +55,15 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
     }
 
     /**
+     * Gets the view-model of the activity
+     *
+     * @return the view-model
+     */
+    public CocktailListViewModel getModel() {
+        return model;
+    }
+
+    /**
      * Abstract search cocktails method to be implemented by sub-classes.
      *
      * @param query the query parameter

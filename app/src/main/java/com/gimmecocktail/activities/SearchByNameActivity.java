@@ -2,12 +2,12 @@ package com.gimmecocktail.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;
-
+import com.android.volley.RequestQueue;
 import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
-import com.gimmecocktail.http.CocktailListRequest;
+import com.gimmecocktail.http.ApiRequestQueue;
+import com.gimmecocktail.http.RequestFactory;
 import com.gimmecocktail.model.Cocktail;
-
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
 
-    private static final String BASE_REQUEST_URL = ;
+    private final RequestQueue requestQueue = new ApiRequestQueue(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +35,15 @@ public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
      */
     @Override
     protected void searchCocktails(String name) {
-        CocktailListRequest request = new CocktailListRequest(BASE_REQUEST_URL + name);
-        request.observe(new Observer<List<Cocktail>>() {
+        RequestFactory.byName(name, requestQueue).observe(new Observer<List<Cocktail>>() {
             @Override
             public void onResult(List<Cocktail> result) {
+                // when the cocktail list is ready, update the mutable live data
                 getModel().getCocktails().setValue(result);
             }
-
             @Override
             public void onError(Exception exception) {
+                // if an error occurs, alert the user
                 Activities.alert(
                         getString(R.string.connection_failed_title),
                         getString(R.string.connection_failed_message),
@@ -51,8 +51,7 @@ public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
                         true
                 );
             }
-        });
-        request.execute();
+        }).send();
     }
 
 }
