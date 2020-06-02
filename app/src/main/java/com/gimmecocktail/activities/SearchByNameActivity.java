@@ -8,11 +8,13 @@ import com.gimmecocktail.R;
 import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.RequestFactory;
 import com.gimmecocktail.model.Cocktail;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Activity that takes user's input from a search bar, queries the API
- * using a search-by-name request and shows the result as cocktail cards.
+ * Activity that takes user's input from a search bar, queries the API for cocktails
+ * using a search-by-name request and shows the result as cards.
  */
 public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
 
@@ -35,6 +37,9 @@ public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
      */
     @Override
     protected void searchCocktails(String name) {
+        // clear the mutable live data
+        getModel().getCocktails().setValue(new ArrayList<Cocktail>());
+        // send the request
         RequestFactory.byName(name, requestQueue).observe(new Observer<List<Cocktail>>() {
             @Override
             public void onResult(List<Cocktail> result) {
