@@ -21,4 +21,6 @@
     <string name="widget_cocktail_name_text">Cocktail name</string>
     <string name="widget_cocktail_ingredients_text">Cocktail ingredients</string>
     <string name="widget_cocktail_ingredients_title">Ingredients</string>
+    <string name="database_connection_error_title">Database connection error</string>
+    <string name="database_connection_error_message">An error occurred while contacting the database</string>
 </resources>

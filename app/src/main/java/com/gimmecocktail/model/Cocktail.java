@@ -45,6 +45,7 @@ public final class Cocktail implements Parcelable {
     @Ignore
     private Bitmap thumbnailBitmap = null;
 
+
     /**
      * Instantiates a new Cocktail.
      *

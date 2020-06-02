@@ -33,6 +33,16 @@ class JsonResponses {
         return cocktails;
     }
 
+    static List<String> cocktailIdSequenceFrom(JSONObject jsonIds) throws JSONException {
+        List<String> ids = new ArrayList<>();
+        JSONArray drinksArray = jsonIds.getJSONArray("drinks");
+        for (int i=0; i<drinksArray.length(); i++) {
+            JSONObject jsonId = drinksArray.getJSONObject(i);
+            ids.add(jsonId.getString("idDrink"));
+        }
+        return ids;
+    }
+
     /**
      * Converts a single API json-cocktail to a Cocktail object.
      *

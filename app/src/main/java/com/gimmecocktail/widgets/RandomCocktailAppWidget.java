@@ -9,7 +9,7 @@ import android.widget.RemoteViews;
 import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.RandomCocktailAppWidgetBinding;
-import com.gimmecocktail.http.OneRandomRequest;
+import com.gimmecocktail.http.CocktailRequest;
 import com.gimmecocktail.model.Cocktail;
 
 import java.util.Objects;
@@ -19,6 +19,7 @@ import java.util.Objects;
  */
 public class RandomCocktailAppWidget extends AppWidgetProvider {
 
+    private final static String RANDOM_REQUEST_URL = "https://www.thecocktaildb.com/api/json/v1/1/random.php";
     RandomCocktailAppWidgetBinding binding;
 
     static void updateAppWidget(final Context context, AppWidgetManager appWidgetManager,
@@ -27,13 +28,18 @@ public class RandomCocktailAppWidget extends AppWidgetProvider {
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.random_cocktail_app_widget);
-        new OneRandomRequest().observe(new Observer<Cocktail>() {
+        new CocktailRequest(RANDOM_REQUEST_URL).observe(new Observer<Cocktail>() {
 
             @Override
             public void onResult(Cocktail cocktail) {
                 views.setImageViewBitmap(R.id.widget_cocktail_thumbnail, cocktail.getThumbnailBitmap());
                 views.setTextViewText(R.id.widget_cocktail_name_text, cocktail.getName());
                 views.setTextViewText(R.id.widget_cocktail_ingredients_text, cocktail.getIngredients());
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                // TODO
             }
         });
         // Instruct the widget manager to update the widget
@@ -56,7 +62,7 @@ public class RandomCocktailAppWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.random_cocktail_app_widget);
-            remoteViews.setTextViewText(R.id.ingredients_text_widget, cock);
+            // TODO remoteViews.setTextViewText(R.id.ingredients_text_widget, );
         }
     }
 

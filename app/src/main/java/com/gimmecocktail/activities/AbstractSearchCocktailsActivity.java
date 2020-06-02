@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.adapters.CocktailCardsAdapter;
@@ -29,7 +28,6 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
 
     private CocktailListViewModel model;
     private ActivitySearchCocktailsBinding binding;
-    private ApiRequestQueue requestQueue;
     private boolean queryTextConfigChangeFlag;
 
     /**
@@ -41,23 +39,10 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         return model;
     }
 
-    /**
-     * Gets the api request queue to be used to add API requests.
-     *
-     * @return the activity request queue
-     */
-    ApiRequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            requestQueue = new ApiRequestQueue(getApplication().getApplicationContext());
-        }
-        return requestQueue;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setModel();
-        setRequestQueue();
         setUpRecyclerView();
         setModelObserver();
         queryTextConfigChangeFlag = savedInstanceState != null;
@@ -85,10 +70,6 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
         this.model = new ViewModelProvider(this).get(CocktailListViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_cocktails);
         this.binding.setLifecycleOwner(this);
-    }
-
-    private void setRequestQueue() {
-        this.requestQueue = new ApiRequestQueue();
     }
 
     private void setUpRecyclerView() {

@@ -5,7 +5,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.NoCache;
+
 
 /**
  * Provides an initialized request queue which can be used to add requests.
@@ -16,13 +16,12 @@ public class ApiRequestQueue extends RequestQueue {
 
     /**
      * Instantiates a new Api request queue.
-     *
-     * @param context the context from which the request is to be initialized
      */
-    public ApiRequestQueue() {
-        super(new NoCache(), new BasicNetwork(new HurlStack()));
+    public ApiRequestQueue(Context context) {
+        super(new DiskBasedCache(
+                context.getCacheDir(), MAX_CACHE_SIZE_IN_BYTES),
+                new BasicNetwork(new HurlStack()));
         this.start();
-        // new DiskBasedCache(context.getCacheDir(), MAX_CACHE_SIZE_IN_BYTES)
     }
 
 }

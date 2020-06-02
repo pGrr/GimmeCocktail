@@ -3,6 +3,12 @@ package com.gimmecocktail.model;
 import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
+
+import com.gimmecocktail.Observer;
+import com.gimmecocktail.R;
+import com.gimmecocktail.activities.Activities;
+import com.gimmecocktail.activities.SearchRandomActivity;
+
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
@@ -45,16 +51,33 @@ public class CocktailQueryMaker {
      * and sets the given boolean mutable live data as true if the cocktail was found
      * (e.g. is favourite)
      *
-     * @param id     the id of the cocktail
+     * @param cocktail     the cocktail
      * @param result the boolean mutable live data reflecting the is-favourite status
      */
-    public void exists(final String id, final MutableLiveData<Boolean> result) {
+    public void isFavourite(final Cocktail cocktail, final MutableLiveData<Boolean> result) {
         forkJoinPool.submit(new Runnable() {
             @Override
             public void run() {
-                result.postValue(daoInstance.idExists(id));
+                result.postValue(daoInstance.idExists(cocktail.getId()));
             }
         });
+    }
+
+    public void isFavourite(final Cocktail cocktail, final Observer<Boolean> result) {
+        forkJoinPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                result.onResult(daoInstance.idExists(cocktail.getId()));
+            }
+        });
+    }
+
+    public void setFavourite(Cocktail cocktail, boolean isFavourite) {
+        if (isFavourite) {
+            this.insertAll(cocktail);
+        } else {
+            this.delete(cocktail);
+        }
     }
 
     /**

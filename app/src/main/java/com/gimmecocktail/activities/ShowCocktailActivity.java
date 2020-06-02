@@ -13,7 +13,7 @@ import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivityShowCocktailBinding;
-import com.gimmecocktail.http.ThumbnailRequest;
+import com.gimmecocktail.http.BitMapRequest;
 import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.utils.FavouriteCocktailImages;
 import com.gimmecocktail.viewmodels.CocktailViewModel;
@@ -54,7 +54,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
 
     private ApiRequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            requestQueue = new ApiRequestQueue(this);
+            requestQueue = new ApiRequestQueue();
         }
         return requestQueue;
     }
@@ -74,7 +74,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
                 binding.setCocktail(cocktail);
                 // query the db: is cocktail favourite?
                 // on response, update isFavourite mutable live data
-                getQueryMaker().exists(cocktail.getId(), model.isFavourite());
+                getQueryMaker().isFavourite(cocktail, model.isFavourite());
                 // if image is in the favourites directory, load it from there
                 boolean savedImageExist = FavouriteCocktailImages.exists(cocktail.getId(), context);
                 if (savedImageExist) {
@@ -86,10 +86,10 @@ public class ShowCocktailActivity extends AppCompatActivity {
                         image.setImageBitmap(cocktail.getThumbnailBitmap());
                     } else {
                         // else get it via http
-                        getRequestQueue().add(new ThumbnailRequest(
+                        getRequestQueue().add(new BitMapRequest(
                                 cocktail.getThumbnailUrl(),
                                 model.getCocktail(),
-                                context));
+                                context).getRequest());
                     }
                 }
                 binding.executePendingBindings();

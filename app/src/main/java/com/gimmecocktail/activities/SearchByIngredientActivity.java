@@ -1,16 +1,21 @@
 package com.gimmecocktail.activities;
 
 import android.os.Bundle;
+
+import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
-import com.gimmecocktail.http.ByIngredientRequest;
+import com.gimmecocktail.http.CocktailListRequest;
 import com.gimmecocktail.model.Cocktail;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity that takes user's input from a search bar, queries the API
  * using a search-by-ingredient request and shows the result as cocktail cards.
  */
 public class SearchByIngredientActivity extends AbstractSearchCocktailsActivity {
+
+    private final static String BASE_REQUEST_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +33,24 @@ public class SearchByIngredientActivity extends AbstractSearchCocktailsActivity 
     @Override
     protected void searchCocktails(String ingredient) {
         getModel().getCocktails().setValue(new ArrayList<Cocktail>());
-        getRequestQueue().add(new ByIngredientRequest(
-                ingredient,
-                getModel().getCocktails(),
-                getRequestQueue(), this));
+        CocktailListRequest request = new CocktailListRequest(BASE_REQUEST_URL + ingredient);
+        request.observe(new Observer<List<Cocktail>>() {
+            @Override
+            public void onResult(List<Cocktail> result) {
+                getModel().getCocktails().setValue(result);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Activities.alert(
+                        getString(R.string.connection_failed_title),
+                        getString(R.string.connection_failed_message),
+                        SearchByIngredientActivity.this,
+                        true
+                );
+            }
+        });
+        request.execute();
     }
 
 }
