@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class CocktailListRequest implements ObservableRequest<List<Cocktail>> {
 
-    private static final String URL_BY_ID_BASE = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
     private List<Observer<List<Cocktail>>> observers = new ArrayList<>();
     private List<Cocktail> cocktails;
     private final String url;
@@ -51,7 +50,7 @@ public class CocktailListRequest implements ObservableRequest<List<Cocktail>> {
                         try {
                             final List<String> ids = JsonResponses.cocktailIdSequenceFrom(response);
                             for (final String id : ids) {
-                                new CocktailRequest(URL_BY_ID_BASE + id, requestQueue)
+                                RequestFactory.byId(id, requestQueue)
                                     .observe(new Observer<Cocktail>() {
                                         @Override
                                         public void onResult(Cocktail result) {
@@ -65,7 +64,7 @@ public class CocktailListRequest implements ObservableRequest<List<Cocktail>> {
                                             notifyErrorToObservers(exception);
                                             exception.printStackTrace();
                                         }
-                                    });
+                                    }).send();
                             }
                         } catch (JSONException e) {
                             notifyErrorToObservers(e);

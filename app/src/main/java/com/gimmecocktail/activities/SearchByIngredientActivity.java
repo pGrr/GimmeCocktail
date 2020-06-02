@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SearchByIngredientActivity extends AbstractSearchCocktailsActivity {
 
-    private final static String BASE_REQUEST_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=";
+    private final static String BASE_REQUEST_URL = ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

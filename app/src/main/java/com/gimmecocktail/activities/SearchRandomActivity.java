@@ -27,8 +27,6 @@ import java.util.Objects;
  */
 public class SearchRandomActivity extends AppCompatActivity {
 
-    private final static String RANDOM_REQUEST_URL = "https://www.thecocktaildb.com/api/json/v1/1/random.php";
-
     private ActivitySearchRandomBinding binding;
     private CocktailViewModel model;
     private CocktailQueryMaker queryMaker;
