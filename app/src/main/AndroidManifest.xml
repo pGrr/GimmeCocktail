@@ -23,8 +23,8 @@
                 android:resource="@xml/random_cocktail_app_widget_info" />
         </receiver>
 
-        <activity android:name=".activities.ShowCocktailActivity" />
         <activity android:name=".activities.FavouritesActivity" />
+        <activity android:name=".activities.ShowCocktailActivity" />
         <activity android:name=".activities.SearchRandomActivity" />
         <activity android:name=".activities.SearchByIngredientActivity" />
         <activity android:name=".activities.SearchByNameActivity" />

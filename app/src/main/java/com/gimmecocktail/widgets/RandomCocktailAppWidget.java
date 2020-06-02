@@ -9,7 +9,9 @@ import android.widget.RemoteViews;
 import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.RandomCocktailAppWidgetBinding;
+import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.CocktailRequest;
+import com.gimmecocktail.http.RequestFactory;
 import com.gimmecocktail.model.Cocktail;
 
 import java.util.Objects;
@@ -28,20 +30,18 @@ public class RandomCocktailAppWidget extends AppWidgetProvider {
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.random_cocktail_app_widget);
-        new CocktailRequest(RANDOM_REQUEST_URL).observe(new Observer<Cocktail>() {
-
+        RequestFactory.random(new ApiRequestQueue(context)).observe(new Observer<Cocktail>() {
             @Override
             public void onResult(Cocktail cocktail) {
                 views.setImageViewBitmap(R.id.widget_cocktail_thumbnail, cocktail.getThumbnailBitmap());
                 views.setTextViewText(R.id.widget_cocktail_name_text, cocktail.getName());
                 views.setTextViewText(R.id.widget_cocktail_ingredients_text, cocktail.getIngredients());
             }
-
             @Override
             public void onError(Exception exception) {
                 // TODO
             }
-        });
+        }).send();
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

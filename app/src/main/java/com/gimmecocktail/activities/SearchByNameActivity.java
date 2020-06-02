@@ -18,11 +18,12 @@ import java.util.List;
  */
 public class SearchByNameActivity extends AbstractSearchCocktailsActivity {
 
-    private final RequestQueue requestQueue = new ApiRequestQueue(this);
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestQueue = new ApiRequestQueue(this);
         // set the title, shown in the top bar
         TextView textView = findViewById(R.id.search_cocktails_title);
         textView.setText(getString(R.string.search_cocktail_by_name_title));

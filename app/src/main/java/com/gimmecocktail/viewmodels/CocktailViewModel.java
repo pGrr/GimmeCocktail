@@ -32,6 +32,7 @@ public class CocktailViewModel extends ViewModel {
     public MutableLiveData<Boolean> isFavourite() {
         if (isFavourite == null) {
             isFavourite = new MutableLiveData<>();
+            isFavourite.setValue(false);
         }
         return isFavourite;
     }

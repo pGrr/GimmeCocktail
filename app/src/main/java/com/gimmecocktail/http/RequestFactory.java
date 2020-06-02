@@ -58,4 +58,16 @@ public class RequestFactory {
                 requestQueue);
     }
 
+
+    /**
+     * Bit map request.
+     *
+     * @param url          the url
+     * @param requestQueue the request queue
+     * @return the bit map request
+     */
+    public static BitMapRequest bitMap(String url, RequestQueue requestQueue) {
+        return new BitMapRequest(url, requestQueue);
+    }
+
 }
