@@ -1,6 +1,7 @@
 package com.gimmecocktail.activities;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.gimmecocktail.Observer;
 import com.gimmecocktail.R;
@@ -20,7 +21,9 @@ public class SearchByIngredientActivity extends AbstractSearchCocktailsActivity 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.search_cocktail_by_ingredient_title));
+        // set the title, shown in the top bar
+        TextView textView = findViewById(R.id.search_cocktails_title);
+        textView.setText(getString(R.string.search_cocktail_by_ingredient_title));
     }
 
     /**

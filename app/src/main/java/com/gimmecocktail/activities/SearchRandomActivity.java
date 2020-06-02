@@ -5,12 +5,11 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
-
-import com.gimmecocktail.http.CocktailRequest;
+import com.gimmecocktail.http.ApiRequestQueue;
+import com.gimmecocktail.http.RequestFactory;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.R;
 import com.gimmecocktail.databinding.ActivitySearchRandomBinding;
@@ -18,31 +17,29 @@ import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.utils.FavouriteCocktailImages;
 import com.gimmecocktail.viewmodels.CocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.Objects;
 
 /**
- * Activity that queries the API with a get-random-cocktail request
- * and shows the result.
+ * Activity that queries the API with for a random-cocktail and shows the result.
+ * Whenever the refresh button is pressed, a new random cocktail is requested and showed.
  */
 public class SearchRandomActivity extends AppCompatActivity {
 
     private ActivitySearchRandomBinding binding;
     private CocktailViewModel model;
+    private ApiRequestQueue requestQueue;
     private CocktailQueryMaker queryMaker;
-
-    private CocktailQueryMaker getQueryMaker() {
-        if (queryMaker == null) {
-            queryMaker = new CocktailQueryMaker(this);
-        }
-        return queryMaker;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // set the model and the data-binding
+        // initialize the request queue, used to send asynchronous requests to the api
+        this.requestQueue = new ApiRequestQueue(this);
+        // initialize the query maker, used to query the database asynchronously
+        this.queryMaker = new CocktailQueryMaker(this);
+        // set the model
         this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
+        // set the data-binding
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_random);
         this.binding.setLifecycleOwner(this);
         // set mutable live data observers
@@ -62,18 +59,21 @@ public class SearchRandomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sends an asynchronous request to the API for a random cocktail,
+     * once the result is ready, updates the cocktail mutable live data.
+     * If an error occurs, it alerts the user.
+     */
     private void setRandomCocktail() {
-        CocktailRequest request = new CocktailRequest(RANDOM_REQUEST_URL);
-        request.observe(new com.gimmecocktail.Observer<Cocktail>() {
+        RequestFactory.random(requestQueue).observe(new com.gimmecocktail.Observer<Cocktail>() {
             @Override
             public void onResult(Cocktail result) {
-                // update the cocktail mutable live data of model
+                // once the cocktail is ready, update the cocktail mutable live data of model
                 model.getCocktail().setValue(result);
             }
-
             @Override
             public void onError(Exception exception) {
-                // alert the connection failed error message to the user
+                // if an error occurs, alert the user
                 Activities.alert(
                         getString(R.string.connection_failed_title),
                         getString(R.string.connection_failed_message),
@@ -81,8 +81,7 @@ public class SearchRandomActivity extends AppCompatActivity {
                         true
                 );
             }
-        });
-        request.execute();
+        }).send();
     }
 
     /**
@@ -120,7 +119,7 @@ public class SearchRandomActivity extends AppCompatActivity {
                     button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
                 }
                 // update the database
-                getQueryMaker().setFavourite(model.getCocktail().getValue(), isFavourite);
+                queryMaker.setFavourite(model.getCocktail().getValue(), isFavourite);
                 // save/delete thumbnail image from memory
                 if (isFavourite
                         && model.getCocktail().getValue() != null
@@ -131,7 +130,7 @@ public class SearchRandomActivity extends AppCompatActivity {
                             model.getCocktail().getValue().getThumbnailBitmap(),
                             SearchRandomActivity.this);
                 } else {
-                    // if is unset favourite, delete the saved image
+                    // else if is set not-favourite, delete the saved image
                     FavouriteCocktailImages.delete(
                             Objects.requireNonNull(model.getCocktail().getValue()).getId(),
                             SearchRandomActivity.this);
@@ -156,8 +155,7 @@ public class SearchRandomActivity extends AppCompatActivity {
 
     private void setRefreshButtonObservers() {
         final FloatingActionButton button = findViewById(R.id.refresh_random_cocktail_button);
-        button.setColorFilter(
-                ContextCompat.getColor(
+        button.setColorFilter(ContextCompat.getColor(
                         SearchRandomActivity.this,
                         R.color.colorPrimary),
                 PorterDuff.Mode.MULTIPLY);
