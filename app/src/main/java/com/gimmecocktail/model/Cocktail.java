@@ -174,7 +174,7 @@ public final class Cocktail implements Parcelable {
     /**
      * Sets the thumbnail bitmap
      *
-     * @param bitmap
+     * @param bitmap the bitmap
      */
     public void setThumbnailBitmap(Bitmap bitmap) {
         thumbnailBitmap = bitmap;

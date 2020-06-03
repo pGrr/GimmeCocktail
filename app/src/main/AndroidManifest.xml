@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".CocktailOfTheDayAppWidget">
+        <receiver android:name=".widgets.CocktailOfTheDayAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.gimmecocktail.CocktailOfTheDayAppWidget.SET_COCKTAIL" />

@@ -24,15 +24,22 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 /**
- * A worker that queries the API for a random cocktail.
+ * A worker that queries the API for a random cocktail using WorkManager.
  * On success, it sends a broadcast to the widget holding the cocktail as extras.
- * On failure, the worker will retry.
+ * On failure, e.g. for a lack of connectivity or for other reasons,
+ * WorkManager will take care of retrying at the most appropriate time until it succeeds.
  */
 public class RandomCocktailWorker extends Worker {
 
     private ListenableWorker.Result result = Result.retry();
-    private int appWidgetId[];
+    private int[] appWidgetId;
 
+    /**
+     * Instantiates a new Random cocktail worker.
+     *
+     * @param context      the context
+     * @param workerParams the worker params
+     */
     public RandomCocktailWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         appWidgetId = workerParams.getInputData().getIntArray("widgetId");
@@ -41,15 +48,17 @@ public class RandomCocktailWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        // Creates the volley requestQueue
         final ApiRequestQueue requestQueue = new ApiRequestQueue(getApplicationContext());
+        // add the random cocktail request to the requestQueue
         requestQueue.add(new JsonObjectRequest(
                 Request.Method.GET,
                 "https://www.thecocktaildb.com/api/json/v1/1/random.php",
                 null,
                 new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
+                        // on response, convert the json to a cocktail object
                         Cocktail cocktail = null;
                         try {
                             cocktail = JsonResponses.cocktailSequenceFrom(response).get(0);
@@ -58,20 +67,25 @@ public class RandomCocktailWorker extends Worker {
                             RandomCocktailWorker.this.result = Result.retry();
                         }
                         final Cocktail finalCocktail = cocktail;
+                        // and add an image request to the requestQueue to get the cocktail image
                         requestQueue.add(new ImageRequest(
                                 Objects.requireNonNull(cocktail).getThumbnailUrl(),
                                 new Response.Listener<Bitmap>() {
                                     @Override
                                     public void onResponse(Bitmap image) {
-                                        RandomCocktailWorker.this.result = Result.success();
+                                        // on response, create and setup the intent for the widget
                                         Intent widgetIntent = new Intent();
                                         widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                                         widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                                         widgetIntent.putExtra("image", image);
                                         widgetIntent.putExtra("cocktail", finalCocktail);
+                                        // send a broadcast to the widget,
+                                        // holding the cocktail and the image as extras
                                         getApplicationContext().sendBroadcast(widgetIntent);
                                         LocalBroadcastManager.getInstance(getApplicationContext())
                                                 .sendBroadcast(widgetIntent);
+                                        // set the work result as success
+                                        RandomCocktailWorker.this.result = Result.success();
                                     }
                                 },
                                 300,
@@ -81,6 +95,8 @@ public class RandomCocktailWorker extends Worker {
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
+                                        // on volley error (connection-related) of image-request,
+                                        // log an error and set the result of the work as "retry"
                                         Log.e(getClass().getName(), Log.getStackTraceString(error));
                                         RandomCocktailWorker.this.result = Result.retry();
                                     }
@@ -91,10 +107,15 @@ public class RandomCocktailWorker extends Worker {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // on volley error (connection-related) of cocktail-request,
+                        // log an error and set the result of the work as "retry"
                         Log.e(getClass().getName(), Log.getStackTraceString(error));
                         RandomCocktailWorker.this.result = Result.retry();
                     }
                 }));
+        // return the work result, which will be "success" if the work succeeded,
+        // else "retry". If "retry" is returned, the WorkManager will take care of
+        // retry the work when most appropriate.
         return result;
     }
 }

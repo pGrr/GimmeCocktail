@@ -18,6 +18,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
         android:contentDescription="@string/appwidget_text"
+        android:elevation="10dp"
         android:gravity="center"
         android:padding="10dp"
         android:text="Waiting for network connection..."
@@ -29,6 +30,7 @@
         android:id="@+id/widget_cocktail_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         android:adjustViewBounds="true"
         android:elevation="10dp"
         app:srcCompat="@mipmap/ic_launcher_foreground" />
