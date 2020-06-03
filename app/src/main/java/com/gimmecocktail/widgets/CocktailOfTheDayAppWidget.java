@@ -1,5 +1,6 @@
 package com.gimmecocktail.widgets;
 
+
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -19,6 +20,7 @@ import com.gimmecocktail.activities.SearchRandomActivity;
 import com.gimmecocktail.model.Cocktail;
 import java.util.Date;
 import java.util.Objects;
+
 
 /**
  * App widget that displays one random cocktail a day.
