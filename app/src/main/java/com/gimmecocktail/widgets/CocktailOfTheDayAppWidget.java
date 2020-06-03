@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import com.gimmecocktail.R;
@@ -32,12 +33,20 @@ import java.util.Objects;
 public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
 
     @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+        saveImageSetTime(context, 0); // reset saved image time on widget enabling
+    }
+
+    @Override
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // this logic prevents infinite loop which is caused due to
+        // this logic prevents infinite loop which is caused by
         // the broadcast of ACTION_PACKAGE_CHANGED in the process of
-        // idle resource cleanup by the work manager: the work will be scheduled
-        // only if not called recently
-        if(!hasWorkCalledRecently(context.getApplicationContext())){
+        // idle resource cleanup by the work manager.
+        // Also, it prevents the cocktail to be set more frequently than once a day.
+        // The work will be scheduled only if not called recently and if the image wasn't set recently
+        if(!hasWorkCalledRecently(context.getApplicationContext())
+                && !hasCocktailSetRecently(context.getApplicationContext())){
             //schedule the fetch-random-cocktail work
             scheduleGetRandomCocktailWork(appWidgetIds, context);
         }
@@ -48,7 +57,7 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         // when the work has fetched the cocktail an its image, it will send an intent
         // using AppWidgetManager.ACTION_APPWIDGET_UPDATE, which will be received here.
-        if (intent.hasExtra("cocktail") && intent.hasExtra("image")) {
+        if (!hasCocktailSetRecently(context) && intent.hasExtra("cocktail") && intent.hasExtra("image")) {
             // if the intent contains the work's data, update the widget's UI
             Cocktail cocktail = Objects.requireNonNull(intent.getExtras()).getParcelable("cocktail");
             Bitmap image = Objects.requireNonNull(intent.getExtras()).getParcelable("image");
@@ -82,6 +91,8 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
         views.setImageViewBitmap(R.id.widget_cocktail_thumbnail, image);
         views.setTextViewText(R.id.widget_cocktail_name, cocktail.getName());
         appWidgetManager.updateAppWidget(appWidgetId, views);
+        // save the time the cocktail was set
+        saveImageSetTime(context, new Date().getTime());
     }
 
     /**
@@ -100,7 +111,11 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
                 new OneTimeWorkRequest.Builder(RandomCocktailWorker.class)
                         .setInputData(source)
                         .build();
-        WorkManager.getInstance(context).enqueue(workRequest);
+        WorkManager.getInstance(context).cancelUniqueWork("fetchRandomCocktail");
+        WorkManager.getInstance(context).enqueueUniqueWork(
+                "fetchRandomCocktail",
+                ExistingWorkPolicy.KEEP,
+                workRequest);
     }
 
     /**
@@ -134,6 +149,40 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
             sharedPref.edit().putLong(context.getString(R.string.last_api_call), new Date().getTime()).commit();
         }
         return true;
+    }
+
+    /**
+     * This is used to prevent cocktail to update more than once a day
+     * @param context the context
+     * @return true if the cocktail was set in the last day, false otherwise
+     */
+    @SuppressWarnings({"IntegerDivisionInFloatingPointContext", "BooleanMethodIsAlwaysInverted"})
+    private static boolean hasCocktailSetRecently(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.location_pref), Context.MODE_PRIVATE);
+
+        long lastImageSetMillis = sharedPref.getLong(
+                context.getString(R.string.last_cocktail_set), 0);
+
+        if(lastImageSetMillis != 0){
+            long currentTime = new Date().getTime();
+            double seconds = (currentTime - lastImageSetMillis)/1000;
+            if(seconds > 86400000){
+                return false;
+            }
+        }
+        return lastImageSetMillis != 0;
+    }
+
+    /**
+     * Saves in the shared preferences the time of setting the cocktail, in order to perform checks.
+     * @param context the context
+     * @param time the time to be set
+     */
+    private static void saveImageSetTime(Context context, long time) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.location_pref), Context.MODE_PRIVATE);
+        sharedPref.edit().putLong(context.getString(R.string.last_cocktail_set), time).apply();
     }
 
 }
