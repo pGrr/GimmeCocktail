@@ -106,6 +106,7 @@ public abstract class AbstractSearchCocktailsActivity extends AppCompatActivity 
                 Intent intent = new Intent(
                         AbstractSearchCocktailsActivity.this,
                         ShowCocktailActivity.class);
+                intent.putExtra("layoutId", R.layout.activity_show_cocktail);
                 intent.putExtra("cocktail", cocktail);
                 startActivity(intent);
             }

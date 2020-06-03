@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.gimmecocktail.R;
-import com.gimmecocktail.databinding.ActivitySearchRandomBinding;
+import com.gimmecocktail.databinding.ActivityShowCocktailBinding;
 import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.RequestFactory;
 import com.gimmecocktail.model.Cocktail;
@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class ShowCocktailActivity extends AppCompatActivity {
 
-    private ActivitySearchRandomBinding binding;
+    private ActivityShowCocktailBinding binding;
     private CocktailViewModel model;
     private ApiRequestQueue requestQueue;
     private CocktailQueryMaker queryMaker;
@@ -56,7 +56,8 @@ public class ShowCocktailActivity extends AppCompatActivity {
         this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
         // set the data-binding
         int layoutId = Objects.requireNonNull(getIntent().getExtras()).getInt("layoutId");
-        this.binding = DataBindingUtil.setContentView(this, layoutId);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_show_cocktail);
+        setContentView(layoutId);
         this.binding.setLifecycleOwner(this);
         // set mutable live data observers
         setCocktailObserver();
@@ -64,7 +65,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         // set button observers
         setFavouriteButtonObserver();
         // if a cocktail was passed as extras, set it in the mutable live data
-        if (savedInstanceState != null && getIntent().hasExtra("cocktail")) {
+        if (getIntent().hasExtra("cocktail")) {
             Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras())
                     .getParcelable("cocktail");
             model.getCocktail().setValue(cocktail);
@@ -154,7 +155,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
                             Objects.requireNonNull(model.getCocktail().getValue()).getId(),
                             model.getCocktail().getValue().getThumbnailBitmap(),
                             ShowCocktailActivity.this);
-                } else {
+                } else if (getModel().getCocktail().getValue() != null) {
                     // else if is set not-favourite, delete the saved image
                     FavouriteCocktailImages.delete(
                             Objects.requireNonNull(model.getCocktail().getValue()).getId(),
@@ -172,8 +173,8 @@ public class ShowCocktailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
                 ShowCocktailActivity.this.model.isFavourite().setValue(!isFavourite);
-                Activities.checkIsFavourite(model.getCocktail().getValue(), model.isFavourite(),
-                        queryMaker, ShowCocktailActivity.this);
+                //Activities.checkIsFavourite(model.getCocktail().getValue(), model.isFavourite(),
+                  //      queryMaker, ShowCocktailActivity.this);
             }
         });
     }
