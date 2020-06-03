@@ -13,7 +13,7 @@ import java.util.Map;
  * Provides static helper methods to convert the Cocktail-DB API https://www.thecocktaildb.com/
  * json responses to Cocktail objects.
  */
-class JsonResponses {
+public class JsonResponses {
 
     /**
      * Converts the API json response to a Cocktail list.
@@ -22,7 +22,7 @@ class JsonResponses {
      * @return the Cocktail list
      * @throws JSONException json exception
      */
-    static List<Cocktail> cocktailSequenceFrom(JSONObject jsonCocktails) throws JSONException {
+    public static List<Cocktail> cocktailSequenceFrom(JSONObject jsonCocktails) throws JSONException {
         List<Cocktail> cocktails = new ArrayList<>();
         JSONArray drinksArray = jsonCocktails.getJSONArray("drinks");
         for (int i=0; i<drinksArray.length(); i++) {

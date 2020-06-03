@@ -41,7 +41,7 @@ public class SearchRandomActivity extends AppCompatActivity {
         setModelObserver();
         setFavouriteButtonBehaviour();
         setRefreshButtonBehaviour();
-        if (savedInstanceState == null) {
+        if (!getIntent().hasExtra("cocktail")) {
             setRandomCocktail();
         }
     }

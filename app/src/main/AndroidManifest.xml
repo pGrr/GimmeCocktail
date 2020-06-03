@@ -13,9 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <receiver android:name=".CocktailOfTheDayAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.gimmecocktail.CocktailOfTheDayAppWidget.SET_COCKTAIL" />
             </intent-filter>
 
             <meta-data
