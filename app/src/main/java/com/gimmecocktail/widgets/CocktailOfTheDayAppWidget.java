@@ -152,7 +152,9 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
     }
 
     /**
-     * This is used to prevent cocktail to update more than once a day
+     * This is used to perform a check against the last time a cocktail was set for this widget.
+     * A cocktail can be updated only once a day.
+     *
      * @param context the context
      * @return true if the cocktail was set in the last day, false otherwise
      */
