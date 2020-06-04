@@ -2,7 +2,6 @@ package com.gimmecocktail.http;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -12,9 +11,6 @@ import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 

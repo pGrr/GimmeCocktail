@@ -40,11 +40,13 @@ public class SearchRandomActivity extends AppCompatActivity {
         setOnFavouriteObserver();
         setFavouriteButtonBehaviour();
         setRefreshButtonBehaviour();
-        if (getIntent().hasExtra("cocktail")) {
-            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
-            model.getCocktail().setValue(cocktail);
-        } else {
-            setRandomCocktail();
+        if (savedInstanceState == null) {
+            if (getIntent().hasExtra("cocktail")) {
+                Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
+                model.getCocktail().setValue(cocktail);
+            } else {
+                setRandomCocktail();
+            }
         }
     }
 

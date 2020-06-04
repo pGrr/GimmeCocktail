@@ -7,25 +7,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
-import com.gimmecocktail.R;
 import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.JsonResponses;
 import com.gimmecocktail.model.Cocktail;
 import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.utils.FavouriteCocktailImages;
-
 import org.json.JSONObject;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

@@ -1,7 +1,6 @@
 package com.gimmecocktail.http;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -11,8 +10,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.gimmecocktail.R;
 import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
-import java.util.Observable;
-import java.util.Observer;
+
+import java.util.Objects;
 
 /**
  * Provides a request initialized to send an image request to a given url.
@@ -42,7 +41,7 @@ public class ThumbnailRequest extends ImageRequest {
                     @Override
                     public void onResponse(Bitmap thumbnail) {
                         Cocktail cocktail = mutableLiveData.getValue();
-                        cocktail.setThumbnailBitmap(thumbnail);
+                        Objects.requireNonNull(cocktail).setThumbnailBitmap(thumbnail);
                         mutableLiveData.setValue(cocktail);
                     }
                 },

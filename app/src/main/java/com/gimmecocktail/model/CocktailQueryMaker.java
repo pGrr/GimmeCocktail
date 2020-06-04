@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 import java.util.List;
-import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -50,14 +49,12 @@ public class CocktailQueryMaker {
     }
 
     public Future<List<Cocktail>> getAll() {
-        final Future<List<Cocktail>> futureResult = forkJoinPool.submit(new Callable<List<Cocktail>>() {
+        return forkJoinPool.submit(new Callable<List<Cocktail>>() {
             @Override
             public List<Cocktail> call() {
-                List<Cocktail> cocktails = daoInstance.getAll();
-                return cocktails;
+                return daoInstance.getAll();
             }
         });
-        return futureResult;
     }
 
     /**
@@ -83,6 +80,7 @@ public class CocktailQueryMaker {
      * @param id     the id
      * @param result the result
      */
+    @SuppressWarnings("unused")
     public void getById(final String id, final MutableLiveData<Cocktail> result) {
         forkJoinPool.submit(new Runnable() {
             @Override
@@ -100,7 +98,7 @@ public class CocktailQueryMaker {
     public Future<Boolean> insertAll(final Cocktail ...cocktails) {
         return forkJoinPool.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 daoInstance.insertAll(cocktails);
                 return true;
             }
@@ -127,7 +125,7 @@ public class CocktailQueryMaker {
     public Future<Boolean> clear() {
         return forkJoinPool.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 daoInstance.clear();
                 return true;
             }

@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
-
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +20,7 @@ public class FavouriteCocktailImages {
     /**
      * The directory of internal storage where favourite cocktails' thumbnails are saved
      */
+    @SuppressWarnings("WeakerAccess")
     public static final String FAVOURITES_THUMBNAILS_DIR = "cocktail-thumbnails";
 
     /**
@@ -35,8 +35,8 @@ public class FavouriteCocktailImages {
             String fileName, Bitmap bitmapImage, Context activity){
         ContextWrapper cw = new ContextWrapper(activity);
         File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
-        File mypath = new File(directory,fileName);
-        try (FileOutputStream fos = new FileOutputStream(mypath)) {
+        File myPath = new File(directory,fileName);
+        try (FileOutputStream fos = new FileOutputStream(myPath)) {
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,11 +93,12 @@ public class FavouriteCocktailImages {
      * @param fileName the file name
      * @param activity the activity
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void delete(String fileName, Context activity){
             ContextWrapper cw = new ContextWrapper(activity);
             File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
-            File mypath = new File(directory,fileName);
-            mypath.delete();
+            File myPath = new File(directory,fileName);
+            myPath.delete();
     }
 
     /**
@@ -110,8 +111,8 @@ public class FavouriteCocktailImages {
     public static boolean exists(String fileName, Context context) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir(FAVOURITES_THUMBNAILS_DIR, Context.MODE_PRIVATE);
-        File mypath = new File(directory,fileName);
-        return mypath.exists();
+        File myPath = new File(directory,fileName);
+        return myPath.exists();
     }
 
 }

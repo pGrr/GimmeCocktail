@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 import androidx.work.Constraints;
-import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
@@ -51,9 +50,6 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        int[] appWidgetId = appWidgetManager.getAppWidgetIds(
-                new ComponentName(context, CocktailOfTheDayAppWidget.class));
         PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
                 RandomCocktailWorker.class, 1, TimeUnit.DAYS)
                 .setConstraints(new Constraints.Builder()
@@ -105,7 +101,7 @@ public class CocktailOfTheDayAppWidget extends AppWidgetProvider {
                 Log.d(getClass().getName(), "loading cocktail from extras");
                 Cocktail cocktail = Objects.requireNonNull(intent.getExtras()).getParcelable("cocktail");
                 Bitmap image = Objects.requireNonNull(intent.getExtras()).getParcelable("image");
-                updateCocktailWidgets(context, cocktail, image);
+                updateCocktailWidgets(context, Objects.requireNonNull(cocktail), image);
             } else {
                 // else attempt to load the cocktail from the database, if present
                 CocktailQueryMaker queryMaker = new CocktailQueryMaker(

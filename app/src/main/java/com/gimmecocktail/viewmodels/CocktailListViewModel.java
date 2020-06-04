@@ -6,7 +6,6 @@ import com.gimmecocktail.model.Cocktail;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A view model that manages a list of Cocktails.
  */
