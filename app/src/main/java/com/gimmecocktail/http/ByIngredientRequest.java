@@ -49,11 +49,13 @@ public class ByIngredientRequest extends JsonObjectRequest {
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
                             mutableLiveData.setValue(new ArrayList<Cocktail>());
-                            JSONArray drinks = cocktailResponse.getJSONArray("drinks");
-                            for (int i=0; i<drinks.length(); i++) {
-                                JSONObject jsonCocktail = drinks.getJSONObject(i);
-                                String id = jsonCocktail.getString("idDrink");
-                                apiRequestQueue.add(new ByIdRequest(id, mutableLiveData, activity));
+                            if (!(ingredient == null) && ! ingredient.isEmpty()) {
+                                JSONArray drinks = cocktailResponse.getJSONArray("drinks");
+                                for (int i=0; i<drinks.length(); i++) {
+                                    JSONObject jsonCocktail = drinks.getJSONObject(i);
+                                    String id = jsonCocktail.getString("idDrink");
+                                    apiRequestQueue.add(new ByIdRequest(id, mutableLiveData, activity));
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

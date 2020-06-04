@@ -45,8 +45,10 @@ public class ByNameRequest extends JsonObjectRequest {
                     public void onResponse(JSONObject response) {
                         try {
                             mutableLiveData.setValue(new ArrayList<Cocktail>());
-                            List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(response);
-                            mutableLiveData.setValue(cocktails);
+                            if (!(name == null) && ! name.isEmpty()) {
+                                List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(response);
+                                mutableLiveData.setValue(cocktails);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
