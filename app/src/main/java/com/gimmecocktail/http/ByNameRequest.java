@@ -13,6 +13,8 @@ import com.gimmecocktail.activities.Activities;
 import com.gimmecocktail.model.Cocktail;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +44,7 @@ public class ByNameRequest extends JsonObjectRequest {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            mutableLiveData.setValue(new ArrayList<Cocktail>());
                             List<Cocktail> cocktails = JsonResponses.cocktailSequenceFrom(response);
                             mutableLiveData.setValue(cocktails);
                         } catch (JSONException e) {

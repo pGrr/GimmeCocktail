@@ -14,6 +14,8 @@ import com.gimmecocktail.model.Cocktail;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,7 @@ public class ByIngredientRequest extends JsonObjectRequest {
                     @Override
                     public void onResponse(JSONObject cocktailResponse) {
                         try {
+                            mutableLiveData.setValue(new ArrayList<Cocktail>());
                             JSONArray drinks = cocktailResponse.getJSONArray("drinks");
                             for (int i=0; i<drinks.length(); i++) {
                                 JSONObject jsonCocktail = drinks.getJSONObject(i);
