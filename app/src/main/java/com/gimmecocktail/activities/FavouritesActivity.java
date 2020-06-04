@@ -32,8 +32,13 @@ public class FavouritesActivity extends AppCompatActivity {
         setModel();
         setUpRecyclerView();
         setModelObserver();
-        searchCocktails();
         binding.executePendingBindings();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        searchCocktails();
     }
 
     private void setModel() {
