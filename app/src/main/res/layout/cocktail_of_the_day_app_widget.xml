@@ -21,7 +21,7 @@
         android:elevation="10dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Waiting for network connection..."
+        android:text="Loading..."
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold|italic" />

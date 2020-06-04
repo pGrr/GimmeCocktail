@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.gimmecocktail.http.ApiRequestQueue;
 import com.gimmecocktail.http.OneRandomRequest;
 import com.gimmecocktail.model.Cocktail;
@@ -20,7 +19,6 @@ import com.gimmecocktail.model.CocktailQueryMaker;
 import com.gimmecocktail.utils.FavouriteCocktailImages;
 import com.gimmecocktail.viewmodels.CocktailViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.Objects;
 
 /**
@@ -38,79 +36,122 @@ public class SearchRandomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setModel();
-        setModelObserver();
+        setCocktailObserver();
+        setOnFavouriteObserver();
         setFavouriteButtonBehaviour();
         setRefreshButtonBehaviour();
-        if (!getIntent().hasExtra("cocktail")) {
+        if (getIntent().hasExtra("cocktail")) {
+            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
+            model.getCocktail().setValue(cocktail);
+        } else {
             setRandomCocktail();
         }
+    }
+
+    private CocktailQueryMaker getQueryMaker() {
+        if (queryMaker == null) {
+            queryMaker = new CocktailQueryMaker(this, CocktailQueryMaker.DbName.FAVOURITES);
+        }
+        return queryMaker;
+    }
+
+    private ApiRequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = new ApiRequestQueue(this);
+        }
+        return requestQueue;
     }
 
     private void setModel() {
         this.model = new ViewModelProvider(this).get(CocktailViewModel.class);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_search_random);
         this.binding.setLifecycleOwner(this);
-        if (getIntent().hasExtra("cocktail")) {
-            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras())
-                    .getParcelable("cocktail");
-            model.getCocktail().setValue(cocktail);
-            checkIsFavourite(Objects.requireNonNull(cocktail));
-            setThumbnail();
-        }
-        binding.setCocktail(model.getCocktail().getValue());
-        binding.executePendingBindings();
     }
 
-    private void setModelObserver() {
+    private void setCocktailObserver() {
+        // Set cocktail mutable live data observer
         model.getCocktail().observe(this, new Observer<Cocktail>() {
+            AppCompatActivity context = SearchRandomActivity.this;
             @Override
-            public void onChanged(Cocktail cocktail) {
+            public void onChanged(Cocktail cocktail) { // on cocktail change
                 binding.setCocktail(cocktail);
-                checkIsFavourite(cocktail);
-                setThumbnail();
+                // query the db: is cocktail favourite?
+                // on response, update isFavourite mutable live data
+                getQueryMaker().exists(cocktail.getId(), model.isFavourite());
+                // if image is in the favourites directory, load it from there
+                boolean savedImageExist = FavouriteCocktailImages.exists(cocktail.getId(), context);
+                if (savedImageExist) {
+                    FavouriteCocktailImages.load(cocktail.getId(), context, R.id.cocktail_thumbnail);
+                } else {
+                    // else if has been downloaded and set, inject it in the image view
+                    if (cocktail.getThumbnailBitmap() != null) {
+                        ImageView image = findViewById(R.id.cocktail_thumbnail);
+                        image.setImageBitmap(cocktail.getThumbnailBitmap());
+                    } else {
+                        // else get it via http
+                        getRequestQueue().add(new ThumbnailRequest(
+                                cocktail.getThumbnailUrl(),
+                                model.getCocktail(),
+                                context));
+                    }
+                }
                 binding.executePendingBindings();
             }
         });
+    }
+
+    private void setOnFavouriteObserver() {
         model.isFavourite().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isFavourite) {
-                final FloatingActionButton button = findViewById(R.id.button_favourites);
+                // Update the database
                 if (isFavourite) {
                     getQueryMaker().insertAll(model.getCocktail().getValue());
                 } else {
                     getQueryMaker().delete(model.getCocktail().getValue());
                 }
-                if (model.getCocktail().getValue().getThumbnailBitmap() != null && isFavourite) {
-                    FavouriteCocktailImages.save(
-                            Objects.requireNonNull(model.getCocktail().getValue()).getId(),
-                            model.getCocktail().getValue().getThumbnailBitmap(),
-                            SearchRandomActivity.this);
+                // Update the favourites button in the UI
+                final FloatingActionButton button = findViewById(R.id.button_favourites);
+                if (isFavourite) {
                     button.setImageDrawable(getDrawable(R.drawable.ic_favorite_white_24dp));
-                } else if (!isFavourite) {
-                    FavouriteCocktailImages.delete(
-                            Objects.requireNonNull(model.getCocktail().getValue()).getId(),
-                            SearchRandomActivity.this);
+                } else {
                     button.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_white_24dp));
                 }
+                // if the cocktail is set favourite and the thumbnail is downloaded and set,
+                // save it in internal memory storage
+                Cocktail cocktail = model.getCocktail().getValue();
+                AppCompatActivity context = SearchRandomActivity.this;
+                if (isFavourite && cocktail.getThumbnailBitmap() != null) {
+                    FavouriteCocktailImages.save(
+                            cocktail.getId(),
+                            cocktail.getThumbnailBitmap(),
+                            context);
+                } else if (!isFavourite) {
+                    // else, if not favourite, delete the saved image from internal memory
+                    FavouriteCocktailImages.delete(cocktail.getId(), context);
+                }
+            }
+        });
+    }
+
+    private void setFavouriteButtonBehaviour() {
+        final FloatingActionButton button = findViewById(R.id.button_favourites);
+        button.setColorFilter(
+                ContextCompat.getColor(
+                        SearchRandomActivity.this,
+                        R.color.colorPrimary),
+                PorterDuff.Mode.MULTIPLY);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
+                model.isFavourite().setValue(!isFavourite);
             }
         });
     }
 
     private void setRandomCocktail() {
         getRequestQueue().add(new OneRandomRequest(model.getCocktail(), this));
-    }
-
-    private void setFavouriteButtonBehaviour() {
-        final FloatingActionButton button = findViewById(R.id.button_favourites);
-        setButtonColor(button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isFavourite = Objects.requireNonNull(model.isFavourite().getValue());
-                SearchRandomActivity.this.model.isFavourite().setValue(!isFavourite);
-                checkIsFavourite(Objects.requireNonNull(model.getCocktail().getValue()));
-            }
-        });
     }
 
     private void setRefreshButtonBehaviour() {
@@ -126,52 +167,6 @@ public class SearchRandomActivity extends AppCompatActivity {
                 setRandomCocktail();
             }
         });
-    }
-
-    private CocktailQueryMaker getQueryMaker() {
-        if (queryMaker == null) {
-            queryMaker = new CocktailQueryMaker(this);
-        }
-        return queryMaker;
-    }
-
-    private ApiRequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            requestQueue = new ApiRequestQueue(this);
-        }
-        return requestQueue;
-    }
-
-    private void checkIsFavourite(Cocktail cocktail) {
-        getQueryMaker().exists(cocktail.getId(), model.isFavourite());
-    }
-
-    private void setButtonColor(FloatingActionButton button) {
-        button.setColorFilter(
-                ContextCompat.getColor(
-                        SearchRandomActivity.this,
-                        R.color.colorPrimary),
-                PorterDuff.Mode.MULTIPLY);
-    }
-
-    private void setThumbnail() {
-        if (FavouriteCocktailImages.exists(
-                model.getCocktail().getValue().getId(), SearchRandomActivity.this)) {
-            FavouriteCocktailImages.load(
-                    model.getCocktail().getValue().getId(),
-                    SearchRandomActivity.this,
-                    R.id.cocktail_thumbnail);
-        } else {
-            if (model.getCocktail().getValue().getThumbnailBitmap() == null) {
-                getRequestQueue().add(new ThumbnailRequest(
-                        Objects.requireNonNull(model.getCocktail().getValue()).getThumbnailUrl(),
-                        model.getCocktail(),
-                        this));
-            } else {
-                ImageView image = findViewById(R.id.cocktail_thumbnail);
-                image.setImageBitmap(model.getCocktail().getValue().getThumbnailBitmap());
-            }
-        }
     }
 
 }

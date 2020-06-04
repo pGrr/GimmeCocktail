@@ -34,20 +34,18 @@ public class ShowCocktailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setModel();
-        setModelObserver();
+        setCocktailObserver();
         setOnFavouriteObserver();
         setFavouriteButtonBehaviour();
-        if (savedInstanceState == null) {
-            if (getIntent().hasExtra("cocktail")) {
-                Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
-                model.getCocktail().setValue(cocktail);
-            }
+        if (getIntent().hasExtra("cocktail")) {
+            Cocktail cocktail = Objects.requireNonNull(getIntent().getExtras()).getParcelable("cocktail");
+            model.getCocktail().setValue(cocktail);
         }
     }
 
     private CocktailQueryMaker getQueryMaker() {
         if (queryMaker == null) {
-            queryMaker = new CocktailQueryMaker(this);
+            queryMaker = new CocktailQueryMaker(this, CocktailQueryMaker.DbName.FAVOURITES);
         }
         return queryMaker;
     }
@@ -65,7 +63,7 @@ public class ShowCocktailActivity extends AppCompatActivity {
         this.binding.setLifecycleOwner(this);
     }
 
-    private void setModelObserver() {
+    private void setCocktailObserver() {
         // Set cocktail mutable live data observer
         model.getCocktail().observe(this, new Observer<Cocktail>() {
             AppCompatActivity context = ShowCocktailActivity.this;

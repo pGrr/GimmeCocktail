@@ -54,4 +54,10 @@ public interface CocktailDAO {
     @Delete
     void delete(Cocktail cocktail);
 
+    /**
+     * Delete all the rows of the database
+     */
+    @Query("DELETE FROM Cocktail")
+    void clear();
+
 }

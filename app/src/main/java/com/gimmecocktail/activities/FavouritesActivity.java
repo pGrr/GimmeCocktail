@@ -32,10 +32,8 @@ public class FavouritesActivity extends AppCompatActivity {
         setModel();
         setUpRecyclerView();
         setModelObserver();
-        if (savedInstanceState == null) {
-            searchCocktails();
-            binding.executePendingBindings();
-        }
+        searchCocktails();
+        binding.executePendingBindings();
     }
 
     private void setModel() {
@@ -70,7 +68,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
     private CocktailQueryMaker getQueryMaker() {
         if (this.queryMaker == null) {
-            this.queryMaker = new CocktailQueryMaker(this);
+            this.queryMaker = new CocktailQueryMaker(this, CocktailQueryMaker.DbName.FAVOURITES);
         }
         return this.queryMaker;
     }

@@ -4,14 +4,21 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 import java.util.List;
+import java.util.Observer;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 /**
  * Provides access to a CocktailDAO instance and handles requests to the database asynchronously.
  */
 public class CocktailQueryMaker {
 
-    private final static String NAME = "cocktails";
+    public enum DbName {
+        FAVOURITES,
+        COCKTAIL_OF_THE_DAY_WIDGET,
+    }
+
     private final CocktailDAO daoInstance;
     private final ForkJoinPool forkJoinPool;
 
@@ -20,14 +27,16 @@ public class CocktailQueryMaker {
      *
      * @param context the context
      */
-    public CocktailQueryMaker(Context context) {
+    public CocktailQueryMaker(Context context, DbName dbName) {
         this.forkJoinPool = new ForkJoinPool();
-        this.daoInstance = Room.databaseBuilder(context, CocktailDatabase.class, NAME).build().getCocktailDAO();
+        this.daoInstance = Room.databaseBuilder(
+                context, CocktailDatabase.class, dbName.name().toLowerCase()).build()
+                .getCocktailDAO();
     }
 
     /**
      * Makes an async query to the database, which will fill the given
-     * cocktail-list mutable live data with all cocktails in the database (i.e. the favourites).
+     * cocktail-list mutable live data with all cocktails in the database.
      *
      * @param result the cocktail-list mutable live data to be updated with the query-result
      */
@@ -40,10 +49,20 @@ public class CocktailQueryMaker {
         });
     }
 
+    public Future<List<Cocktail>> getAll() {
+        final Future<List<Cocktail>> futureResult = forkJoinPool.submit(new Callable<List<Cocktail>>() {
+            @Override
+            public List<Cocktail> call() {
+                List<Cocktail> cocktails = daoInstance.getAll();
+                return cocktails;
+            }
+        });
+        return futureResult;
+    }
+
     /**
      * Makes an async query to the database for the cocktail with the given id,
      * and sets the given boolean mutable live data as true if the cocktail was found
-     * (e.g. is favourite)
      *
      * @param id     the id of the cocktail
      * @param result the boolean mutable live data reflecting the is-favourite status
@@ -74,21 +93,22 @@ public class CocktailQueryMaker {
     }
 
     /**
-     * Insert all the given cocktails in the database (i.e. sets them as favourite).
+     * Insert all the given cocktails in the database.
      *
      * @param cocktails the cocktails
      */
-    public void insertAll(final Cocktail ...cocktails) {
-        forkJoinPool.submit(new Runnable() {
+    public Future<Boolean> insertAll(final Cocktail ...cocktails) {
+        return forkJoinPool.submit(new Callable<Boolean>() {
             @Override
-            public void run() {
+            public Boolean call() throws Exception {
                 daoInstance.insertAll(cocktails);
+                return true;
             }
         });
     }
 
     /**
-     * Delete the given cocktail from the database (i.e. sets it as non-favourite).
+     * Delete the given cocktail from the database.
      *
      * @param cocktail the cocktail
      */
@@ -97,6 +117,19 @@ public class CocktailQueryMaker {
             @Override
             public void run() {
                 daoInstance.delete(cocktail);
+            }
+        });
+    }
+
+    /**
+     * Delete all rows of the the database.
+     */
+    public Future<Boolean> clear() {
+        return forkJoinPool.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                daoInstance.clear();
+                return true;
             }
         });
     }
