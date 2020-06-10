@@ -19,7 +19,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.gimmecocktail.CocktailOfTheDayAppWidget.SET_COCKTAIL" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/cocktail_of_the_day_app_widget_info" />
